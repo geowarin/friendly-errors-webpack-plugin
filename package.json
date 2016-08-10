@@ -1,0 +1,34 @@
+{
+  "name": "friendly-errors-webpack-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "keywords": [
+    "awesome",
+    "react",
+    "cli"
+  ],
+  "author": "Geoffroy Warin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geowarin/friendly-errors-webpack-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/geowarin/friendly-errors-webpack-plugin/issues"
+  },
+  "homepage": "http://geowarin.github.io/friendly-errors-webpack-plugin",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "expect": "^1.20.2",
+    "webpack": "^2.1.0-beta.20"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.spec.js"
+    ]
+  }
+}
