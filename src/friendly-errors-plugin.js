@@ -14,7 +14,7 @@ const LOGO = path.join(__dirname, 'tarec_logo_ico.png');
 
 class FriendlyErrorsWebpackPlugin {
 
-  constructor ({notificationTitle, compilationSuccessMessage, showNotifications}) {
+  constructor ({notificationTitle, compilationSuccessMessage, showNotifications} = {}) {
     this.notificationTitle = notificationTitle;
     this.compilationSuccessMessage = compilationSuccessMessage;
     this.notifier = showNotifications && safeRequire('node-notifier');

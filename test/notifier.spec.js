@@ -6,11 +6,11 @@ const Module = require('webpack/lib/Module');
 EventEmitter.prototype.plugin = EventEmitter.prototype.on;
 
 const debug = require("../src/debug");
-const NotifierPlugin = require("../src/notifier");
+const FriendlyErrorsPlugin = require("../index");
 
 test('notifier : capture invalid message', t => {
 
-  const notifierPlugin = new NotifierPlugin({});
+  const notifierPlugin = new FriendlyErrorsPlugin();
   var mockCompiler = new EventEmitter();
   notifierPlugin.apply(mockCompiler);
 
@@ -23,7 +23,7 @@ test('notifier : capture invalid message', t => {
 
 test('notifier : capture compilation without errors', t => {
 
-  const notifierPlugin = new NotifierPlugin({});
+  const notifierPlugin = new FriendlyErrorsPlugin();
   var mockCompiler = new EventEmitter();
   notifierPlugin.apply(mockCompiler);
 
@@ -44,7 +44,7 @@ test('notifier : capture compilation without errors', t => {
 
 test('notifier : capture babel syntax error and clean it', t => {
 
-  const notifierPlugin = new NotifierPlugin({});
+  const notifierPlugin = new FriendlyErrorsPlugin();
   var mockCompiler = new EventEmitter();
   notifierPlugin.apply(mockCompiler);
 
@@ -80,7 +80,7 @@ test('notifier : capture babel syntax error and clean it', t => {
 
 test('notifier : capture a Module not found error', t => {
 
-  const notifierPlugin = new NotifierPlugin({});
+  const notifierPlugin = new FriendlyErrorsPlugin();
   var mockCompiler = new EventEmitter();
   notifierPlugin.apply(mockCompiler);
 
@@ -110,7 +110,7 @@ test('notifier : capture a Module not found error', t => {
 
 test('notifier : should display the origin of an error', t => {
 
-  const notifierPlugin = new NotifierPlugin({});
+  const notifierPlugin = new FriendlyErrorsPlugin();
   var mockCompiler = new EventEmitter();
   notifierPlugin.apply(mockCompiler);
 
@@ -148,7 +148,7 @@ test('notifier : should display the origin of an error', t => {
 
 test('notifier : capture a warning', t => {
 
-  const notifierPlugin = new NotifierPlugin({});
+  const notifierPlugin = new FriendlyErrorsPlugin();
   var mockCompiler = new EventEmitter();
   notifierPlugin.apply(mockCompiler);
 

@@ -4,7 +4,7 @@ const chalk = require('chalk');
 class Debugger {
 
   constructor () {
-    this.enabled = false;
+    this.enabled = true;
     this.capturing = false;
     this.capturedMessages = [];
   }
