@@ -26,7 +26,6 @@ function extractError (e) {
   };
 }
 
-
 function getFile (e) {
   if (e.file) {
     return e.file;

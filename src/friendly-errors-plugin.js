@@ -2,6 +2,7 @@ const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
 const processErrors = require('./processError');
+const formatErrors = require('./formatErrors');
 const debug = require('./debug');
 
 const transformers = [
@@ -65,14 +66,7 @@ class FriendlyErrorsWebpackPlugin {
         }
 
         processedErrors = getMaxSeverityErrors(processedErrors, 'severity');
-        let formattedErrors = formatters.reduce((output, formatter) => {
-          if (!output) {
-            return formatter(processedErrors, 'Error');
-          }
-
-          return output;
-        }, null);
-
+        let formattedErrors = formatErrors(processedErrors, formatters, 'Error');
         formattedErrors.map((errorSection) => debug.log(errorSection));
         return;
       }
@@ -82,13 +76,7 @@ class FriendlyErrorsWebpackPlugin {
         const nbWarning = processedWarns.length;
         displayCompilationMessage(`Compiled with ${nbWarning} warnings`, 'yellow');
 
-        let formattedWarning = formatters.reduce((output, formatter) => {
-          if (!output) {
-            return formatter(processedWarns, 'Warning');
-          }
-
-          return output;
-        }, null);
+        let formattedWarning = formatErrors(processedWarns, formatters, 'Warning');
 
         formattedWarning.map((errorSection) => debug.log(errorSection));
       }
