@@ -47,17 +47,16 @@ class FriendlyErrorsWebpackPlugin {
 
       const hasErrors = stats.hasErrors();
       const hasWarnings = stats.hasWarnings();
+
       if (!hasErrors && !hasWarnings) {
         const time = stats.endTime - stats.startTime;
         debug.log(chalk.green('Compiled successfully in ' + time + 'ms'));
         if (this.compilationSuccessMessage) {
           debug.log(this.compilationSuccessMessage);
         }
-        return;
-      }
-
-      if (hasErrors) {
-        let processedErrors = processErrors(stats.compilation.errors, transformers);
+      } else if (hasErrors) {
+        const { errors } = stats.compilation;
+        const processedErrors = processErrors(errors, transformers);
         const nbErrors = processedErrors.length;
         displayCompilationMessage(`Failed to compile with ${nbErrors} errors`, 'red');
 
@@ -65,20 +64,17 @@ class FriendlyErrorsWebpackPlugin {
           this.notify('Error', processedErrors[0]);
         }
 
-        processedErrors = getMaxSeverityErrors(processedErrors, 'severity');
-        let formattedErrors = formatErrors(processedErrors, formatters, 'Error');
-        formattedErrors.map((errorSection) => debug.log(errorSection));
-        return;
-      }
-
-      if (hasWarnings) {
-        const processedWarns = processErrors(stats.compilation.warnings, transformers);
+        const topErrors = getMaxSeverityErrors(processedErrors, 'severity');
+        formatErrors(topErrors, formatters, 'Error')
+          .forEach((chunk) => debug.log(chunk));
+      } else if (hasWarnings) {
+        const { warnings } = stats.compilation;
+        const processedWarns = processErrors(warnings, transformers);
         const nbWarning = processedWarns.length;
         displayCompilationMessage(`Compiled with ${nbWarning} warnings`, 'yellow');
 
-        let formattedWarning = formatErrors(processedWarns, formatters, 'Warning');
-
-        formattedWarning.map((errorSection) => debug.log(errorSection));
+        formatErrors(processedWarns, formatters, 'Warning')
+          .forEach((chunk) => debug.log(chunk));
       }
     });
 

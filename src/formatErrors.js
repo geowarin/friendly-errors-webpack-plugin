@@ -1,11 +1,9 @@
 function formatErrors(errors, formatters, errorType) {
-  return formatters.reduce((output, formatter) => {
-    if (!output) {
-      return formatter(errors, errorType);
-    }
+  const formatted = formatters.reduce((output, formatter) => (
+    output.concat(formatter(errors, errorType) || [])
+  ), []);
 
-    return output;
-  }, null);
+  return formatted;
 }
 
 module.exports = formatErrors;

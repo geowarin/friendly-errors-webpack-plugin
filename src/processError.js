@@ -5,9 +5,7 @@ function processErrors(errors, transformers) {
   return errors
     .map(extractError)
     .map((error) => (
-      transformers.reduce((e, t) => (
-        t(e)
-      ), error)
+      transformers.reduce((e, t) => t(e), error)
     ));
 }
 
