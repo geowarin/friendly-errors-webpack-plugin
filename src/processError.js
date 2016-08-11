@@ -1,10 +1,6 @@
 const RequestShortener = require("webpack/lib/RequestShortener");
 const requestShortener = new RequestShortener(process.cwd());
 
-function applyFirst(collection, cb) {
-
-}
-
 function processErrors(errors, transformers) {
   return errors
     .map(extractError)

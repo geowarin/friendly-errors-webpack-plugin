@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-function displayError (index, severity, error) {
+function displayError(index, severity, error) {
   const displayError = []
   if (error.file) {
     displayError.push(chalk.red((index + 1) + ') ' + severity) + ' in ' + error.file);
@@ -16,16 +16,16 @@ function displayError (index, severity, error) {
   return displayError;
 }
 
-function isGenericError(error) {
+function isDefaultError(error) {
   return !error.type || error.type === 'babel-syntax-error';
 }
 
-module.exports = {
-  format: (errors, type) => {
-    return errors
-      .filter(isGenericError)
-      .reduce((accum, error, i ) => (
-        accum.concat(displayError(i, type, error))
-      ), []);
-  },
-};
+function format(errors, type) {
+  return errors
+    .filter(isDefaultError)
+    .reduce((accum, error, i ) => (
+      accum.concat(displayError(i, type, error))
+    ), []);
+}
+
+module.exports = format;

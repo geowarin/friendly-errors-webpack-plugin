@@ -6,13 +6,13 @@ const formatErrors = require('./formatErrors');
 const debug = require('./debug');
 
 const transformers = [
-  require('./transformers/babelSyntax').transform,
-  require('./transformers/moduleNotFound').transform,
+  require('./transformers/babelSyntax'),
+  require('./transformers/moduleNotFound'),
 ];
 
 const formatters = [
-  require('./transformers/moduleNotFound').format,
-  require('./transformers/genericError').format,
+  require('./formatters/moduleNotFound'),
+  require('./formatters/defaultError'),
 ];
 
 function safeRequire (moduleName) {
