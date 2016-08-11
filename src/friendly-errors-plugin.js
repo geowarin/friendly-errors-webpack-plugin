@@ -1,7 +1,7 @@
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
-const processError = require('./processError');
+const processErrors = require('./processError');
 const debug = require('./debug');
 
 const transformers = [
@@ -56,10 +56,7 @@ class FriendlyErrorsWebpackPlugin {
       }
 
       if (hasErrors) {
-        let processedErrors = stats.compilation.errors.map((error) => {
-          return processError(error, transformers);
-        });
-
+        let processedErrors = processErrors(stats.compilation.errors, transformers);
         const nbErrors = processedErrors.length;
         displayCompilationMessage(`Failed to compile with ${nbErrors} errors`, 'red');
 
@@ -81,9 +78,7 @@ class FriendlyErrorsWebpackPlugin {
       }
 
       if (hasWarnings) {
-        const processedWarns = stats.compilation.warnings.map((error) => {
-          return processError(error, transformers);
-        });
+        const processedWarns = processErrors(stats.compilation.warnings, transformers);
         const nbWarning = processedWarns.length;
         displayCompilationMessage(`Compiled with ${nbWarning} warnings`, 'yellow');
 

@@ -1,10 +1,18 @@
 const RequestShortener = require("webpack/lib/RequestShortener");
 const requestShortener = new RequestShortener(process.cwd());
 
-function processError(webpackError, transformers) {
-  return transformers.reduce((error, transformer) => {
-    return transformer(error);
-  }, extractError(webpackError));
+function applyFirst(collection, cb) {
+
+}
+
+function processErrors(errors, transformers) {
+  return errors
+    .map(extractError)
+    .map((error) => (
+      transformers.reduce((e, t) => (
+        t(e)
+      ), error)
+    ));
 }
 
 function extractError (e) {
@@ -48,4 +56,4 @@ function getOrigin (e) {
   return origin;
 }
 
-module.exports = processError;
+module.exports = processErrors;
