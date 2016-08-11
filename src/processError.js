@@ -1,38 +1,10 @@
 const RequestShortener = require("webpack/lib/RequestShortener");
 const requestShortener = new RequestShortener(process.cwd());
 
-function cleanStackTrace (message) {
-  return message
-    .replace(/^\s*at\s.*:\d+:\d+[\s\)]*\n/gm, ''); // at ... ...:x:y
-}
-
-function isBabelSyntaxError (e) {
-  return e.name === 'ModuleBuildError' && e.message.indexOf('SyntaxError') >= 0;
-}
-
-function isModuleNotFoundError (e) {
-  return e.name === 'ModuleNotFoundError'
-    && e.message.indexOf('Module not found') === 0
-    && e.dependencies && e.dependencies.length;
-}
-
-function formatMessage (webpackError) {
-
-  const error = extractError(webpackError);
-  if (isBabelSyntaxError(webpackError)) {
-    error.message = cleanStackTrace(error.message + '\n');
-    error.type = 'babel-syntax-error';
-    error.severity = 1000;
-  } else if (isModuleNotFoundError(webpackError)) {
-    error.message = `Module not found ${webpackError.dependencies[0].request}`;
-    error.module = webpackError.dependencies[0].request;
-    error.type = 'module-not-found';
-    error.severity = 900;
-  } else {
-    error.severity = 0;
-  }
-
-  return error;
+function processError(webpackError, transformers) {
+  return transformers.reduce((error, transformer) => {
+    return transformer(error);
+  }, extractError(webpackError));
 }
 
 function extractError (e) {
@@ -40,7 +12,9 @@ function extractError (e) {
     message: e.message,
     file: getFile(e),
     origin: getOrigin(e),
-    name: e.name
+    name: e.name,
+    severity: 0,
+    webpackError: e,
   };
 }
 
@@ -74,4 +48,4 @@ function getOrigin (e) {
   return origin;
 }
 
-module.exports = formatMessage;
+module.exports = processError;

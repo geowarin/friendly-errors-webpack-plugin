@@ -1,8 +1,18 @@
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
-const formatMessage = require('./formatMessage');
+const processError = require('./processError');
 const debug = require('./debug');
+
+const transformers = [
+  require('./transformers/babelSyntax').transform,
+  require('./transformers/moduleNotFound').transform,
+];
+
+const formatters = [
+  require('./transformers/moduleNotFound').format,
+  require('./transformers/genericError').format,
+];
 
 function safeRequire (moduleName) {
   try {
@@ -46,34 +56,46 @@ class FriendlyErrorsWebpackPlugin {
       }
 
       if (hasErrors) {
-        let formattedErrors = stats.compilation.errors.map(formatMessage);
-        const nbErrors = formattedErrors.length;
+        let processedErrors = stats.compilation.errors.map((error) => {
+          return processError(error, transformers);
+        });
+
+        const nbErrors = processedErrors.length;
         displayCompilationMessage(`Failed to compile with ${nbErrors} errors`, 'red');
 
         if (this.notifier) {
-          this.notify('Error', formattedErrors[0]);
+          this.notify('Error', processedErrors[0]);
         }
 
-        formattedErrors = getMaxSeverityErrors(formattedErrors, 'severity');
-        if (formattedErrors[0].type === 'module-not-found') {
-          debug.log('These dependencies were not found in node_modules:');
-          debug.log();
-          formattedErrors.forEach((error, index) => debug.log('*', error.module));
-          debug.log();
-          debug.log('Did you forget to run npm install --save for them?')
-        } else {
-          formattedErrors.forEach((error, index) => displayError(index, 'Error', error));
-        }
+        processedErrors = getMaxSeverityErrors(processedErrors, 'severity');
+        let formattedErrors = formatters.reduce((output, formatter) => {
+          if (!output) {
+            return formatter(processedErrors, 'Error');
+          }
 
+          return output;
+        }, null);
+
+        formattedErrors.map((errorSection) => debug.log(errorSection));
         return;
       }
 
       if (hasWarnings) {
-        const formattedWarnings = stats.compilation.warnings.map(formatMessage);
-        const nbWarning = formattedWarnings.length;
+        const processedWarns = stats.compilation.warnings.map((error) => {
+          return processError(error, transformers);
+        });
+        const nbWarning = processedWarns.length;
         displayCompilationMessage(`Compiled with ${nbWarning} warnings`, 'yellow');
 
-        formattedWarnings.forEach((warning, index) => displayError(index, 'Warning', warning));
+        let formattedWarning = formatters.reduce((output, formatter) => {
+          if (!output) {
+            return formatter(processedWarns, 'Warning');
+          }
+
+          return output;
+        }, null);
+
+        formattedWarning.map((errorSection) => debug.log(errorSection));
       }
     });
 
