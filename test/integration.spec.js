@@ -33,8 +33,8 @@ test('integration : babel syntax error', t => {
     '',
     '1) Error in ./fixtures/babel-syntax/index.js',
     '',
-    `Module build failed: SyntaxError: /Users/geowarin/dev/projects/friendly-errors-webpack-plugin/test/fixtures/babel-syntax/index.js: Unexpected token (5:11)
-  3 |
+    `Module build failed: SyntaxError: ${__dirname}/fixtures/babel-syntax/index.js: Unexpected token (5:11)
+  3 |${' '}
   4 |   render() {
 > 5 |     return <div>
     |            ^

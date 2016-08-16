@@ -33,7 +33,7 @@ function getOrigin (e) {
         (dep.loc.start.line !== dep.loc.end.line ? dep.loc.end.line + ':' : '') + dep.loc.end.column;
     });
     var current = e.origin;
-    while (current.issuer) {
+    while (current.issuer && typeof current.issuer.readableIdentifier === 'function') {
       current = current.issuer;
       origin += '\n @ ' + current.readableIdentifier(requestShortener);
     }
