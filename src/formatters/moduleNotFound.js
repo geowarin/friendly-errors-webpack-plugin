@@ -1,14 +1,31 @@
+function dependenciesNotFound(count) {
+  if (count === 1) {
+    return 'This dependency was not found in node_modules:';
+  }
+
+  return 'These dependencies were not found in node_modules:';
+}
+
+function forgetToInstall(count) {
+  if (count === 1) {
+    return 'Did you forget to run npm install --save for it?';
+  }
+
+  return 'Did you forget to run npm install --save for them?';
+}
+
 function formatErrors(errors) {
   if (errors.length === 0) {
-    return;
+    return [];
   }
-  const displayError = [];
-  displayError.push('These dependencies were not found in node_modules:');
-  displayError.push('');
-  errors.forEach((error, index) => displayError.push(`* ${error.module}`));
-  displayError.push('');
-  displayError.push('Did you forget to run npm install --save for them?')
-  return displayError;
+
+  return [
+    dependenciesNotFound(errors.length),
+    '',
+    ...errors.map(({ module }) =>`* ${module}`),
+    '',
+    forgetToInstall(errors.length),
+  ];
 }
 
 function format(errors) {

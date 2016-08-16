@@ -1,19 +1,15 @@
 const chalk = require('chalk');
 
-function displayError(index, severity, error) {
-  const displayError = []
-  if (error.file) {
-    displayError.push(chalk.red((index + 1) + ') ' + severity) + ' in ' + error.file);
-  } else {
-    displayError.push(chalk.red((index + 1) + ') ' + severity));
-  }
-  displayError.push('');
-  displayError.push(error.message);
-  if (error.origin) {
-    displayError.push(error.origin);
-  }
-  displayError.push('');
-  return displayError;
+function displayError(index, severity, { file, message, origin }) {
+  const baseError = chalk.red(`${index + 1}) ${severity}`);
+
+  return [
+    `${baseError} ${file ? 'in ' + file : ''}`,
+    '',
+    message,
+    (origin ? origin : undefined),
+    ''
+  ].filter((chunk) => chunk !== undefined);
 }
 
 function isDefaultError(error) {
