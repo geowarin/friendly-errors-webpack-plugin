@@ -31,12 +31,7 @@ test('Sets the appropiate message', () => {
   }).type).toEqual('module-not-found');
 });
 
-// test('Sets type to babel-syntax-error', () => {
-//   const error = { name: 'ModuleBuildError', message: 'SyntaxError' };
-//   expect(moduleNotFound(error).type).toEqual('babel-syntax-error');
-// });
-//
-// test('Ignores other errors', () => {
-//   const error = { name: 'OtherError' };
-//   expect(moduleNotFound(error)).toEqual(error);
-// });
+test('Ignores other errors', () => {
+  const error = { name: 'OtherError' };
+  expect(moduleNotFound(error)).toEqual(error);
+});
