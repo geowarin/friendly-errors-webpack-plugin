@@ -2,11 +2,12 @@ const RequestShortener = require("webpack/lib/RequestShortener");
 const requestShortener = new RequestShortener(process.cwd());
 
 function processErrors(errors, transformers) {
+  const transform = (error, transformer) => transformer(error);
+  const applyTransformations = (error) => transformers.reduce(transform, error);
+
   return errors
     .map(extractError)
-    .map((error) => (
-      transformers.reduce((e, t) => t(e), error)
-    ));
+    .map(applyTransformations);
 }
 
 function extractError (e) {
