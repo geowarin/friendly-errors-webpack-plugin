@@ -1,49 +1,16 @@
 const RequestShortener = require("webpack/lib/RequestShortener");
 const requestShortener = new RequestShortener(process.cwd());
 
-function cleanStackTrace (message) {
-  return message
-    .replace(/^\s*at\s.*:\d+:\d+[\s\)]*\n/gm, ''); // at ... ...:x:y
-}
-
-function isBabelSyntaxError (e) {
-  return e.name === 'ModuleBuildError' && e.message.indexOf('SyntaxError') >= 0;
-}
-
-function isModuleNotFoundError (e) {
-  return e.name === 'ModuleNotFoundError'
-    && e.message.indexOf('Module not found') === 0
-    && e.dependencies && e.dependencies.length;
-}
-
-function formatMessage (webpackError) {
-
-  const error = extractError(webpackError);
-  if (isBabelSyntaxError(webpackError)) {
-    error.message = cleanStackTrace(error.message + '\n');
-    error.type = 'babel-syntax-error';
-    error.severity = 1000;
-  } else if (isModuleNotFoundError(webpackError)) {
-    error.message = `Module not found ${webpackError.dependencies[0].request}`;
-    error.module = webpackError.dependencies[0].request;
-    error.type = 'module-not-found';
-    error.severity = 900;
-  } else {
-    error.severity = 0;
-  }
-
-  return error;
-}
-
 function extractError (e) {
   return {
     message: e.message,
     file: getFile(e),
     origin: getOrigin(e),
-    name: e.name
+    name: e.name,
+    severity: 0,
+    webpackError: e,
   };
 }
-
 
 function getFile (e) {
   if (e.file) {
@@ -66,7 +33,7 @@ function getOrigin (e) {
         (dep.loc.start.line !== dep.loc.end.line ? dep.loc.end.line + ':' : '') + dep.loc.end.column;
     });
     var current = e.origin;
-    while (current.issuer) {
+    while (current.issuer && typeof current.issuer.readableIdentifier === 'function') {
       current = current.issuer;
       origin += '\n @ ' + current.readableIdentifier(requestShortener);
     }
@@ -74,4 +41,4 @@ function getOrigin (e) {
   return origin;
 }
 
-module.exports = formatMessage;
+module.exports = extractError;

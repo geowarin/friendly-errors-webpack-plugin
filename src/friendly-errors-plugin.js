@@ -1,8 +1,19 @@
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
-const formatMessage = require('./formatMessage');
+const processErrors = require('./processError');
+const formatErrors = require('./formatErrors');
 const debug = require('./debug');
+
+const transformers = [
+  require('./transformers/babelSyntax'),
+  require('./transformers/moduleNotFound'),
+];
+
+const formatters = [
+  require('./formatters/moduleNotFound'),
+  require('./formatters/defaultError'),
+];
 
 function safeRequire (moduleName) {
   try {
@@ -36,44 +47,34 @@ class FriendlyErrorsWebpackPlugin {
 
       const hasErrors = stats.hasErrors();
       const hasWarnings = stats.hasWarnings();
+
       if (!hasErrors && !hasWarnings) {
         const time = stats.endTime - stats.startTime;
         debug.log(chalk.green('Compiled successfully in ' + time + 'ms'));
         if (this.compilationSuccessMessage) {
           debug.log(this.compilationSuccessMessage);
         }
-        return;
-      }
-
-      if (hasErrors) {
-        let formattedErrors = stats.compilation.errors.map(formatMessage);
-        const nbErrors = formattedErrors.length;
+      } else if (hasErrors) {
+        const { errors } = stats.compilation;
+        const processedErrors = processErrors(errors, transformers);
+        const nbErrors = processedErrors.length;
         displayCompilationMessage(`Failed to compile with ${nbErrors} errors`, 'red');
 
         if (this.notifier) {
-          this.notify('Error', formattedErrors[0]);
+          this.notify('Error', processedErrors[0]);
         }
 
-        formattedErrors = getMaxSeverityErrors(formattedErrors, 'severity');
-        if (formattedErrors[0].type === 'module-not-found') {
-          debug.log('These dependencies were not found in node_modules:');
-          debug.log();
-          formattedErrors.forEach((error, index) => debug.log('*', error.module));
-          debug.log();
-          debug.log('Did you forget to run npm install --save for them?')
-        } else {
-          formattedErrors.forEach((error, index) => displayError(index, 'Error', error));
-        }
-
-        return;
-      }
-
-      if (hasWarnings) {
-        const formattedWarnings = stats.compilation.warnings.map(formatMessage);
-        const nbWarning = formattedWarnings.length;
+        const topErrors = getMaxSeverityErrors(processedErrors, 'severity');
+        formatErrors(topErrors, formatters, 'Error')
+          .forEach((chunk) => debug.log(chunk));
+      } else if (hasWarnings) {
+        const { warnings } = stats.compilation;
+        const processedWarns = processErrors(warnings, transformers);
+        const nbWarning = processedWarns.length;
         displayCompilationMessage(`Compiled with ${nbWarning} warnings`, 'yellow');
 
-        formattedWarnings.forEach((warning, index) => displayError(index, 'Warning', warning));
+        formatErrors(processedWarns, formatters, 'Warning')
+          .forEach((chunk) => debug.log(chunk));
       }
     });
 
