@@ -3,7 +3,7 @@ const expect = require('expect');
 const test = require('ava');
 const chalk = require('chalk');
 
-const noColor = (arr) => arr.map(chalk.stripColor)
+const noColor = (arr) => arr.map(chalk.stripColor);
 const error = { message: 'Error message', file: './src/index.js' };
 
 test('Formats errors with no type', () => {

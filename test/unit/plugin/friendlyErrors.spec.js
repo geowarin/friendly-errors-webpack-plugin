@@ -5,8 +5,8 @@ const Stats = require('webpack/lib/Stats');
 const Module = require('webpack/lib/Module');
 EventEmitter.prototype.plugin = EventEmitter.prototype.on;
 
-const debug = require("../src/debug");
-const FriendlyErrorsPlugin = require("../index");
+const debug = require("../../../src/debug");
+const FriendlyErrorsPlugin = require("../../../index");
 
 test('friendlyErrors : capture invalid message', t => {
 
