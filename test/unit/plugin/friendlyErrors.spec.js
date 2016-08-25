@@ -4,8 +4,9 @@ const EventEmitter = require('events');
 const Stats = require('webpack/lib/Stats');
 const Module = require('webpack/lib/Module');
 EventEmitter.prototype.plugin = EventEmitter.prototype.on;
+var assert = require('assert-diff');
 
-const debug = require("../../../src/debug");
+const output = require("../../../src/output");
 const FriendlyErrorsPlugin = require("../../../index");
 
 test('friendlyErrors : capture invalid message', t => {
@@ -14,11 +15,13 @@ test('friendlyErrors : capture invalid message', t => {
   var mockCompiler = new EventEmitter();
   notifierPlugin.apply(mockCompiler);
 
-  debug.capture();
-  mockCompiler.emit('invalid');
-  t.is(debug.capturedMessages.length, 1);
-  t.is(debug.capturedMessages[0], 'Compiling...');
-  debug.endCapture();
+  var logs = output.captureLogs(() => {
+    mockCompiler.emit('invalid');
+  });
+
+  assert.deepEqual(logs,
+    ['Compiling...']
+  );
 });
 
 test('friendlyErrors : capture compilation without errors', t => {
@@ -35,9 +38,11 @@ test('friendlyErrors : capture compilation without errors', t => {
   stats.startTime = 0;
   stats.endTime = 100;
 
-  debug.capture();
-  mockCompiler.emit('done', stats);
-  t.is(debug.capturedMessages.length, 1);
-  t.is(debug.capturedMessages[0], 'Compiled successfully in 100ms');
-  debug.endCapture();
+  var logs = output.captureLogs(() => {
+    mockCompiler.emit('done', stats);
+  });
+
+  assert.deepEqual(logs, [
+    'Compiled successfully in 100ms'
+  ]);
 });

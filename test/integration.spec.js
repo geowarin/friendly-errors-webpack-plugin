@@ -1,6 +1,5 @@
-const expect = require('expect');
 const test = require('ava');
-const debug = require("../src/debug");
+const output = require("../src/output");
 const deasync = require('deasync');
 var assert = require('assert-diff');
 
@@ -8,9 +7,11 @@ const webpack = deasync(require('webpack'));
 
 test('integration : module-errors', t => {
 
-  debug.capture();
-  webpack(require('./fixtures/module-errors/webpack.config.js'));
-  assert.deepEqual(debug.capturedMessages, [
+  var logs = output.captureLogs(() => {
+    webpack(require('./fixtures/module-errors/webpack.config.js'));
+  });
+
+  assert.deepEqual(logs, [
     '',
     'Failed to compile with 2 errors',
     '',
@@ -21,14 +22,15 @@ test('integration : module-errors', t => {
     '',
     'Did you forget to run npm install --save for them?'
   ]);
-  debug.endCapture();
 });
 
 test('integration : should display eslint warnings', t => {
 
-  debug.capture();
-  webpack(require('./fixtures/eslint-warnings/webpack.config.js'));
-  assert.deepEqual(debug.capturedMessages, [
+  var logs = output.captureLogs(() => {
+    webpack(require('./fixtures/eslint-warnings/webpack.config.js'));
+  });
+
+  assert.deepEqual(logs, [
     '',
     'Failed to compile with 1 warnings',
     '',
@@ -41,14 +43,15 @@ test('integration : should display eslint warnings', t => {
 `,
     ''
   ]);
-  debug.endCapture();
 });
 
 test('integration : babel syntax error', t => {
 
-  debug.capture();
-  webpack(require('./fixtures/babel-syntax/webpack.config'));
-  assert.deepEqual(debug.capturedMessages, [
+  var logs = output.captureLogs(() => {
+    webpack(require('./fixtures/babel-syntax/webpack.config'));
+  });
+
+  assert.deepEqual(logs, [
     '',
     'Failed to compile with 1 errors',
     '',
@@ -64,5 +67,4 @@ test('integration : babel syntax error', t => {
   7 | }`,
     ''
   ]);
-  debug.endCapture();
 });

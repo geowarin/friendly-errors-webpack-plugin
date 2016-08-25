@@ -5,48 +5,32 @@ const chalk = require('chalk');
 const os = require('os');
 const transformErrors = require('./core/transformErrors');
 const formatErrors = require('./core/formatErrors');
-const debug = require('./debug');
+const output = require('./output');
 
-const transformers = [
+const defaultTransformers = [
   require('./transformers/babelSyntax'),
   require('./transformers/moduleNotFound'),
 ];
 
-const formatters = [
+const defaultFormatters = [
   require('./formatters/moduleNotFound'),
   require('./formatters/defaultError'),
 ];
-
-function safeRequire (moduleName) {
-  try {
-    return require(moduleName);
-  } catch (ignored) {}
-}
-
-const LOGO = path.join(__dirname, 'tarec_logo_ico.png');
 
 class FriendlyErrorsWebpackPlugin {
 
   constructor (options) {
     options = options || {};
-    this.notificationTitle = options.notificationTitle;
     this.compilationSuccessMessage = options.compilationSuccessMessage;
-    this.notifier = options.showNotifications && safeRequire('node-notifier');
-  }
-
-  notify (serverity, error) {
-    this.notifier.notify({
-      title: this.notificationTitle,
-      message: serverity + ': ' + error.name,
-      subtitle: error.file || '',
-      icon: LOGO
-    });
+    this.notifier = options.notifier;
+    this.formatters = concat(defaultFormatters, options.additionalFormatters);
+    this.transformers = concat(defaultTransformers, options.additionalTransformers);
   }
 
   apply (compiler) {
 
     compiler.plugin('done', stats => {
-      debug.clearConsole();
+      output.clearConsole();
 
       const hasErrors = stats.hasErrors();
       const hasWarnings = stats.hasWarnings();
@@ -57,43 +41,43 @@ class FriendlyErrorsWebpackPlugin {
       }
 
       if (hasErrors) {
-        this.displayErrors(stats.compilation.errors, 'errors', 'red', this.notifier);
+        this.displayErrors(stats.compilation.errors, 'error', 'red');
         return;
       }
 
       if (hasWarnings) {
-        this.displayErrors(stats.compilation.warnings, 'warnings', 'yellow');
+        this.displayErrors(stats.compilation.warnings, 'warning', 'yellow');
       }
     });
 
     compiler.plugin('invalid', () => {
-      debug.clearConsole();
-      debug.log(chalk.cyan('Compiling...'));
+      output.clearConsole();
+      output.log(chalk.cyan('Compiling...'));
     });
   }
 
   displaySuccess(stats) {
     const time = stats.endTime - stats.startTime;
-    debug.log(chalk.green('Compiled successfully in ' + time + 'ms'));
+    output.log(chalk.green('Compiled successfully in ' + time + 'ms'));
 
     if (this.compilationSuccessMessage) {
-      debug.log(this.compilationSuccessMessage);
+      output.log(this.compilationSuccessMessage);
     }
   }
 
-  displayErrors(errors, level, color, notifier) {
+  displayErrors(errors, level, color) {
 
-    const processedErrors = transformErrors(errors, transformers);
+    const processedErrors = transformErrors(errors, this.transformers);
     const nbErrors = processedErrors.length;
-    displayCompilationMessage(`Failed to compile with ${nbErrors} ${level}`, color);
+    displayCompilationMessage(`Failed to compile with ${nbErrors} ${level}s`, color);
 
-    if (notifier) {
-      this.notify('Error', processedErrors[0]);
+    if (this.notifier) {
+      this.notifier(level, processedErrors);
     }
 
     const topErrors = getMaxSeverityErrors(processedErrors);
-    formatErrors(topErrors, formatters, 'Error')
-      .forEach((chunk) => debug.log(chunk));
+    formatErrors(topErrors, this.formatters, 'Error')
+      .forEach((chunk) => output.log(chunk));
   }
 }
 
@@ -108,10 +92,19 @@ function getMaxInt(collection, propertyName) {
   }, 0)
 }
 
+/**
+ * Concat and flattens non-null values. First arg must be an array.
+ * Ex: concat([1], undefined, 2, [3, 4]) = [1, 2, 3, 4]
+ */
+function concat() {
+  var args = Array.from(arguments).filter(e => e);
+  return Array.prototype.concat.apply(args[0], args.slice(1));
+}
+
 module.exports = FriendlyErrorsWebpackPlugin;
 
 function displayCompilationMessage (message, color) {
-  debug.log();
-  debug.log(chalk[color](message));
-  debug.log();
+  output.log();
+  output.log(chalk[color](message));
+  output.log();
 }
