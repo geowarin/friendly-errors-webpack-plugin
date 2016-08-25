@@ -54,12 +54,12 @@ class FriendlyErrorsWebpackPlugin {
       }
 
       if (hasErrors) {
-        this.displayErrors(stats.compilation.errors, 'red', this.notifier);
+        this.displayErrors(stats.compilation.errors, 'errors', 'red', this.notifier);
         return;
       }
 
       if (hasWarnings) {
-        this.displayErrors(stats.compilation.warnings, 'yellow');
+        this.displayErrors(stats.compilation.warnings, 'warnings', 'yellow');
       }
     });
 
@@ -78,11 +78,11 @@ class FriendlyErrorsWebpackPlugin {
     }
   }
 
-  displayErrors(errors, color, notifier) {
+  displayErrors(errors, level, color, notifier) {
 
     const processedErrors = transformErrors(errors, transformers);
     const nbErrors = processedErrors.length;
-    displayCompilationMessage(`Failed to compile with ${nbErrors} errors`, color);
+    displayCompilationMessage(`Failed to compile with ${nbErrors} ${level}`, color);
 
     if (notifier) {
       this.notify('Error', processedErrors[0]);

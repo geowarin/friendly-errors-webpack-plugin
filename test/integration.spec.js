@@ -2,6 +2,7 @@ const expect = require('expect');
 const test = require('ava');
 const debug = require("../src/debug");
 const deasync = require('deasync');
+var assert = require('assert-diff');
 
 const webpack = deasync(require('webpack'));
 
@@ -9,7 +10,7 @@ test('integration : module-errors', t => {
 
   debug.capture();
   webpack(require('./fixtures/module-errors/webpack.config.js'));
-  expect(debug.capturedMessages).toEqual([
+  assert.deepEqual(debug.capturedMessages, [
     '',
     'Failed to compile with 2 errors',
     '',
@@ -23,11 +24,31 @@ test('integration : module-errors', t => {
   debug.endCapture();
 });
 
+test('integration : should display eslint warnings', t => {
+
+  debug.capture();
+  webpack(require('./fixtures/eslint-warnings/webpack.config.js'));
+  assert.deepEqual(debug.capturedMessages, [
+    '',
+    'Failed to compile with 1 warnings',
+    '',
+    '1) Error in ./fixtures/eslint-warnings/index.js',
+    '',
+    `${__dirname}/fixtures/eslint-warnings/index.js
+  1:7  warning  'unused' is defined but never used  no-unused-vars
+
+✖ 1 problem (0 errors, 1 warning)
+`,
+    ''
+  ]);
+  debug.endCapture();
+});
+
 test('integration : babel syntax error', t => {
 
   debug.capture();
   webpack(require('./fixtures/babel-syntax/webpack.config'));
-  expect(debug.capturedMessages).toEqual([
+  assert.deepEqual(debug.capturedMessages, [
     '',
     'Failed to compile with 1 errors',
     '',

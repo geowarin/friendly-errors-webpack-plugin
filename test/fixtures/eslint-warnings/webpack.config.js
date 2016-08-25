@@ -7,9 +7,17 @@ module.exports = {
     filename: "bundle.js"
   },
   plugins: [
-    new FriendlyErrorsWebpackPlugin()
+    new FriendlyErrorsWebpackPlugin(),
+
   ],
   module: {
+    preLoaders: [
+      {
+        test: /\.js$/,
+        loader: 'eslint',
+        include: __dirname
+      }
+    ],
     loaders: [
       {
         test: /\.jsx?$/,
