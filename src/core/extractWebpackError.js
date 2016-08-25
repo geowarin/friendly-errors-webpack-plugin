@@ -1,5 +1,12 @@
 const RequestShortener = require("webpack/lib/RequestShortener");
+
+// TODO: allow the location to be customized in options
 const requestShortener = new RequestShortener(process.cwd());
+
+/*
+ This logic is mostly duplicated from webpack/lib/Stats.js#toJson()
+ See: https://github.com/webpack/webpack/blob/2f618e733aab4755deb42e9d8e859609005607c0/lib/Stats.js#L89
+*/
 
 function extractError (e) {
   return {

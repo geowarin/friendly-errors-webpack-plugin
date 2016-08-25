@@ -9,7 +9,7 @@ function displayError(index, severity, { file, message, origin }) {
     message,
     (origin ? origin : undefined),
     ''
-  ].filter((chunk) => chunk !== undefined);
+  ].filter(chunk => chunk !== undefined);
 }
 
 function isDefaultError(error) {

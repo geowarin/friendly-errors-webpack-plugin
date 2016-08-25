@@ -1,8 +1,8 @@
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
-const processErrors = require('./processError');
-const formatErrors = require('./formatErrors');
+const transformErrors = require('./core/transformErrors');
+const formatErrors = require('./core/formatErrors');
 const debug = require('./debug');
 
 const transformers = [
@@ -51,12 +51,15 @@ class FriendlyErrorsWebpackPlugin {
       if (!hasErrors && !hasWarnings) {
         const time = stats.endTime - stats.startTime;
         debug.log(chalk.green('Compiled successfully in ' + time + 'ms'));
+
         if (this.compilationSuccessMessage) {
           debug.log(this.compilationSuccessMessage);
         }
+
       } else if (hasErrors) {
+
         const { errors } = stats.compilation;
-        const processedErrors = processErrors(errors, transformers);
+        const processedErrors = transformErrors(errors, transformers);
         const nbErrors = processedErrors.length;
         displayCompilationMessage(`Failed to compile with ${nbErrors} errors`, 'red');
 
@@ -64,12 +67,14 @@ class FriendlyErrorsWebpackPlugin {
           this.notify('Error', processedErrors[0]);
         }
 
-        const topErrors = getMaxSeverityErrors(processedErrors, 'severity');
+        const topErrors = getMaxSeverityErrors(processedErrors);
         formatErrors(topErrors, formatters, 'Error')
           .forEach((chunk) => debug.log(chunk));
+
       } else if (hasWarnings) {
+
         const { warnings } = stats.compilation;
-        const processedWarns = processErrors(warnings, transformers);
+        const processedWarns = transformErrors(warnings, transformers);
         const nbWarning = processedWarns.length;
         displayCompilationMessage(`Compiled with ${nbWarning} warnings`, 'yellow');
 
@@ -97,20 +102,6 @@ function getMaxInt(collection, propertyName) {
 }
 
 module.exports = FriendlyErrorsWebpackPlugin;
-
-function displayError (index, severity, error) {
-  if (error.file) {
-    debug.log(chalk.red((index + 1) + ') ' + severity) + ' in ' + error.file);
-  } else {
-    debug.log(chalk.red((index + 1) + ') ' + severity));
-  }
-  debug.log();
-  debug.log(error.message);
-  if (error.origin) {
-    debug.log(error.origin);
-  }
-  debug.log();
-}
 
 function displayCompilationMessage (message, color) {
   debug.log();

@@ -1,3 +1,6 @@
+/**
+ * Applies formatters to all AnnotatedErrors.
+ */
 function formatErrors(errors, formatters, errorType) {
   const format = (formatter) => formatter(errors, errorType) || [];
   const flatten = (accum, curr) => accum.concat(curr);

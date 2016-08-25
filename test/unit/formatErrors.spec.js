@@ -1,4 +1,4 @@
-const formatErrors = require('../../src/formatErrors');
+const formatErrors = require('../../src/core/formatErrors');
 const expect = require('expect');
 const test = require('ava');
 
@@ -11,7 +11,7 @@ const allCaps = (errors) => errors
 const notFound = (errors) => errors
   .filter(({ type }) => type === 'not-found').map(() => 'Not found');
 
-const formatters = [allCaps]
+const formatters = [allCaps];
 
 test('formats the error based on the matching formatters', () => {
   const errors = [
