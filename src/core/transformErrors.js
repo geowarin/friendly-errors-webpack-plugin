@@ -15,7 +15,7 @@ const extractError = require('./extractWebpackError');
  * - webpackError (original error)
  *
  * An AnnotatedError should be an extension (Object.assign) of the WebpackError
- * and add whatever information is convenient for formatter.
+ * and add whatever information is convenient for formatting.
  * In particular, they should have a 'priority' field.
  *
  * The plugin will only display errors having maximum priority at the same time.

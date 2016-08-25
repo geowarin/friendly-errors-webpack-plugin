@@ -1,8 +1,8 @@
 /**
  * Applies formatters to all AnnotatedErrors.
  *
- * A formatter has the following signature FormattedError => Array<String>.
- * It takes a formatted error produced by a transormer and returns a list
+ * A formatter has the following signature: FormattedError => Array<String>.
+ * It takes a formatted error produced by a transformer and returns a list
  * of log statements to print.
  *
  */
