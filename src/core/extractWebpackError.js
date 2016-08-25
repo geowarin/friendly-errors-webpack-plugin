@@ -1,3 +1,5 @@
+'use strict';
+
 const RequestShortener = require("webpack/lib/RequestShortener");
 
 // TODO: allow the location to be customized in options

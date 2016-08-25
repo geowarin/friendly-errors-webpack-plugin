@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
@@ -25,10 +27,11 @@ const LOGO = path.join(__dirname, 'tarec_logo_ico.png');
 
 class FriendlyErrorsWebpackPlugin {
 
-  constructor ({notificationTitle, compilationSuccessMessage, showNotifications} = {}) {
-    this.notificationTitle = notificationTitle;
-    this.compilationSuccessMessage = compilationSuccessMessage;
-    this.notifier = showNotifications && safeRequire('node-notifier');
+  constructor (options) {
+    options = options || {};
+    this.notificationTitle = options.notificationTitle;
+    this.compilationSuccessMessage = options.compilationSuccessMessage;
+    this.notifier = options.showNotifications && safeRequire('node-notifier');
   }
 
   notify (serverity, error) {

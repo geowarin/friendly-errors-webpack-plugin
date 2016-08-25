@@ -1,3 +1,5 @@
+'use strict';
+
 const extractError = require('./extractWebpackError');
 
 /**

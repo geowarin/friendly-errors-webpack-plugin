@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Applies formatters to all AnnotatedErrors.
  *

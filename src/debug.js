@@ -1,3 +1,5 @@
+'use strict';
+
 const stripAnsi = require('strip-ansi');
 const chalk = require('chalk');
 
@@ -24,26 +26,26 @@ class Debugger {
     this.capturedMessages = [];
   }
 
-  log (...args) {
+  log () {
     if (this.enabled) {
-      this.captureConsole(args, console.log);
+      this.captureConsole(Array.from(arguments), console.log);
     }
   }
 
-  info (...args) {
+  info () {
     if (this.enabled) {
-      this.captureConsole(args, console.info, 'green');
+      this.captureConsole(Array.from(arguments), console.info, 'green');
     }
   }
 
-  error (...args) {
+  error () {
     // always show errors
-    this.captureConsole(args, console.error, 'red');
+    this.captureConsole(Array.from(arguments), console.error, 'red');
   }
 
-  warn (...args) {
+  warn () {
     if (this.enabled) {
-      this.captureConsole(args, console.warn, 'yellow');
+      this.captureConsole(Array.from(arguments), console.warn, 'yellow');
     }
   }
 

@@ -1,13 +1,15 @@
+'use strict';
+
 const chalk = require('chalk');
 
-function displayError(index, severity, { file, message, origin }) {
+function displayError(index, severity, error) {
   const baseError = chalk.red(`${index + 1}) ${severity}`);
 
   return [
-    `${baseError} ${file ? 'in ' + file : ''}`,
+    `${baseError} ${error.file ? 'in ' + error.file : ''}`,
     '',
-    message,
-    (origin ? origin : undefined),
+    error.message,
+    (error.origin ? error.origin : undefined),
     ''
   ].filter(chunk => chunk !== undefined);
 }

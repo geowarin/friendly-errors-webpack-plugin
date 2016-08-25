@@ -1,4 +1,6 @@
-function dependenciesNotFound(count) {
+'use strict';
+
+function dependenciesNotFound (count) {
   if (count === 1) {
     return 'This dependency was not found in node_modules:';
   }
@@ -6,7 +8,7 @@ function dependenciesNotFound(count) {
   return 'These dependencies were not found in node_modules:';
 }
 
-function forgetToInstall(count) {
+function forgetToInstall (count) {
   if (count === 1) {
     return 'Did you forget to run npm install --save for it?';
   }
@@ -14,21 +16,20 @@ function forgetToInstall(count) {
   return 'Did you forget to run npm install --save for them?';
 }
 
-function formatErrors(errors) {
+function formatErrors (errors) {
   if (errors.length === 0) {
     return [];
   }
 
   return [
     dependenciesNotFound(errors.length),
-    '',
-    ...errors.map(({ module }) =>`* ${module}`),
-    '',
-    forgetToInstall(errors.length),
-  ];
+    ''
+  ]
+    .concat(errors.map(e =>`* ${e.module}`))
+    .concat('', forgetToInstall(errors.length));
 }
 
-function format(errors) {
+function format (errors) {
   return formatErrors(errors.filter((e) => (
     e.type === 'module-not-found'
   )));

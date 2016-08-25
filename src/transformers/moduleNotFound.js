@@ -1,7 +1,9 @@
+'use strict';
+
 const TYPE = 'module-not-found';
 
-function isModuleNotFoundError(e) {
-  const { webpackError = {} } = e;
+function isModuleNotFoundError (e) {
+  const webpackError = e.webpackError || {};
   return webpackError.dependencies && webpackError.dependencies.length &&
     (e.type === TYPE ||
      e.name === 'ModuleNotFoundError' &&
