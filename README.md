@@ -7,5 +7,5 @@ and [this](https://github.com/geowarin/tarec/pull/16) for more context.
 
 ## TODO
 
-- [ ] Make it compatible with node 4
+- [x] Make it compatible with node 4
 - [ ] Write tests using webpack 1
