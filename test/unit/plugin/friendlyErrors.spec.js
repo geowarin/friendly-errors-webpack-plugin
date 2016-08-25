@@ -9,11 +9,11 @@ var assert = require('assert-diff');
 const output = require("../../../src/output");
 const FriendlyErrorsPlugin = require("../../../index");
 
-test('friendlyErrors : capture invalid message', t => {
+const notifierPlugin = new FriendlyErrorsPlugin();
+var mockCompiler = new EventEmitter();
+notifierPlugin.apply(mockCompiler);
 
-  const notifierPlugin = new FriendlyErrorsPlugin();
-  var mockCompiler = new EventEmitter();
-  notifierPlugin.apply(mockCompiler);
+test('friendlyErrors : capture invalid message', t => {
 
   var logs = output.captureLogs(() => {
     mockCompiler.emit('invalid');
@@ -26,18 +26,7 @@ test('friendlyErrors : capture invalid message', t => {
 
 test('friendlyErrors : capture compilation without errors', t => {
 
-  const notifierPlugin = new FriendlyErrorsPlugin();
-  var mockCompiler = new EventEmitter();
-  notifierPlugin.apply(mockCompiler);
-
-  const compilation = {
-    errors: [],
-    warnings: []
-  };
-  const stats = new Stats(compilation);
-  stats.startTime = 0;
-  stats.endTime = 100;
-
+  var stats = successfulCompilationStats();
   var logs = output.captureLogs(() => {
     mockCompiler.emit('done', stats);
   });
@@ -46,3 +35,14 @@ test('friendlyErrors : capture compilation without errors', t => {
     'Compiled successfully in 100ms'
   ]);
 });
+
+function successfulCompilationStats() {
+  const compilation = {
+    errors: [],
+    warnings: []
+  };
+  const stats = new Stats(compilation);
+  stats.startTime = 0;
+  stats.endTime = 100;
+  return stats;
+}

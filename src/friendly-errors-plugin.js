@@ -22,7 +22,8 @@ class FriendlyErrorsWebpackPlugin {
   constructor (options) {
     options = options || {};
     this.compilationSuccessMessage = options.compilationSuccessMessage;
-    this.notifier = options.notifier;
+    this.onError = options.onError;
+    this.shouldClearConsole = Boolean(options.clearConsole);
     this.formatters = concat(defaultFormatters, options.additionalFormatters);
     this.transformers = concat(defaultTransformers, options.additionalTransformers);
   }
@@ -30,7 +31,7 @@ class FriendlyErrorsWebpackPlugin {
   apply (compiler) {
 
     compiler.plugin('done', stats => {
-      output.clearConsole();
+      this.clearConsole();
 
       const hasErrors = stats.hasErrors();
       const hasWarnings = stats.hasWarnings();
@@ -51,9 +52,15 @@ class FriendlyErrorsWebpackPlugin {
     });
 
     compiler.plugin('invalid', () => {
-      output.clearConsole();
+      this.clearConsole();
       output.log(chalk.cyan('Compiling...'));
     });
+  }
+
+  clearConsole() {
+    if (this.shouldClearConsole) {
+      output.clearConsole();
+    }
   }
 
   displaySuccess(stats) {
@@ -71,8 +78,8 @@ class FriendlyErrorsWebpackPlugin {
     const nbErrors = processedErrors.length;
     displayCompilationMessage(`Failed to compile with ${nbErrors} ${level}s`, color);
 
-    if (this.notifier) {
-      this.notifier(level, processedErrors);
+    if (this.onError) {
+      this.onError(level, processedErrors);
     }
 
     const topErrors = getMaxSeverityErrors(processedErrors);
