@@ -49,37 +49,17 @@ class FriendlyErrorsWebpackPlugin {
       const hasWarnings = stats.hasWarnings();
 
       if (!hasErrors && !hasWarnings) {
-        const time = stats.endTime - stats.startTime;
-        debug.log(chalk.green('Compiled successfully in ' + time + 'ms'));
+        this.displaySuccess(stats);
+        return;
+      }
 
-        if (this.compilationSuccessMessage) {
-          debug.log(this.compilationSuccessMessage);
-        }
+      if (hasErrors) {
+        this.displayErrors(stats.compilation.errors, 'red', this.notifier);
+        return;
+      }
 
-      } else if (hasErrors) {
-
-        const { errors } = stats.compilation;
-        const processedErrors = transformErrors(errors, transformers);
-        const nbErrors = processedErrors.length;
-        displayCompilationMessage(`Failed to compile with ${nbErrors} errors`, 'red');
-
-        if (this.notifier) {
-          this.notify('Error', processedErrors[0]);
-        }
-
-        const topErrors = getMaxSeverityErrors(processedErrors);
-        formatErrors(topErrors, formatters, 'Error')
-          .forEach((chunk) => debug.log(chunk));
-
-      } else if (hasWarnings) {
-
-        const { warnings } = stats.compilation;
-        const processedWarns = transformErrors(warnings, transformers);
-        const nbWarning = processedWarns.length;
-        displayCompilationMessage(`Compiled with ${nbWarning} warnings`, 'yellow');
-
-        formatErrors(processedWarns, formatters, 'Warning')
-          .forEach((chunk) => debug.log(chunk));
+      if (hasWarnings) {
+        this.displayErrors(stats.compilation.warnings, 'yellow');
       }
     });
 
@@ -87,6 +67,30 @@ class FriendlyErrorsWebpackPlugin {
       debug.clearConsole();
       debug.log(chalk.cyan('Compiling...'));
     });
+  }
+
+  displaySuccess(stats) {
+    const time = stats.endTime - stats.startTime;
+    debug.log(chalk.green('Compiled successfully in ' + time + 'ms'));
+
+    if (this.compilationSuccessMessage) {
+      debug.log(this.compilationSuccessMessage);
+    }
+  }
+
+  displayErrors(errors, color, notifier) {
+
+    const processedErrors = transformErrors(errors, transformers);
+    const nbErrors = processedErrors.length;
+    displayCompilationMessage(`Failed to compile with ${nbErrors} errors`, color);
+
+    if (notifier) {
+      this.notify('Error', processedErrors[0]);
+    }
+
+    const topErrors = getMaxSeverityErrors(processedErrors);
+    formatErrors(topErrors, formatters, 'Error')
+      .forEach((chunk) => debug.log(chunk));
   }
 }
 
