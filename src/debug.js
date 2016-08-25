@@ -1,6 +1,6 @@
 'use strict';
 
-const stripAnsi = require('strip-ansi');
+
 const chalk = require('chalk');
 
 class Debugger {
@@ -57,7 +57,7 @@ class Debugger {
 
   captureConsole (args, method, color) {
     if (this.capturing) {
-      this.capturedMessages.push(stripAnsi(args.join(' ').trim()));
+      this.capturedMessages.push(chalk.stripColor(args.join(' ').trim()));
     } else {
       method.apply(console, this.colorize(args, color));
     }
