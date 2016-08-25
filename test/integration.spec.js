@@ -34,7 +34,7 @@ test('integration : should display eslint warnings', t => {
     '',
     'Failed to compile with 1 warnings',
     '',
-    '1) Error in ./fixtures/eslint-warnings/index.js',
+    '1) warning in ./fixtures/eslint-warnings/index.js',
     '',
     `${__dirname}/fixtures/eslint-warnings/index.js
   1:7  warning  'unused' is defined but never used  no-unused-vars
@@ -55,7 +55,7 @@ test('integration : babel syntax error', t => {
     '',
     'Failed to compile with 1 errors',
     '',
-    '1) Error in ./fixtures/babel-syntax/index.js',
+    '1) error in ./fixtures/babel-syntax/index.js',
     '',
     `Module build failed: SyntaxError: Unexpected token (5:11)
 
