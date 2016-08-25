@@ -13,9 +13,12 @@ function displayError(index, severity, { file, message, origin }) {
 }
 
 function isDefaultError(error) {
-  return !error.type || error.type === 'babel-syntax-error';
+  return !error.type;
 }
 
+/**
+ * Format errors without a type
+ */
 function format(errors, type) {
   return errors
     .filter(isDefaultError)
