@@ -1,10 +1,10 @@
 'use strict';
 
-const chalk = require('chalk');
 const concat = require('../utils').concat;
+const formatTitle = require('../utils/colors').formatTitle;
 
-function displayError(index, severity, error) {
-  const baseError = chalk.red(`${index + 1}) ${severity}`);
+function displayError(severity, error) {
+  const baseError = formatTitle(severity, severity);
 
   return concat(
     `${baseError} ${error.file ? 'in ' + error.file : ''}`,
@@ -26,8 +26,8 @@ function isDefaultError(error) {
 function format(errors, type) {
   return errors
     .filter(isDefaultError)
-    .reduce((accum, error, i ) => (
-      accum.concat(displayError(i, type, error))
+    .reduce((accum, error) => (
+      accum.concat(displayError(type, error))
     ), []);
 }
 

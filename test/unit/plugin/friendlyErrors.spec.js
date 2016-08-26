@@ -19,8 +19,10 @@ test('friendlyErrors : capture invalid message', t => {
     mockCompiler.emit('invalid');
   });
 
-  assert.deepEqual(logs,
-    ['Compiling...']
+  assert.deepEqual(logs, [
+    ' WAIT  Compiling...',
+    ''
+    ]
   );
 });
 
@@ -32,7 +34,8 @@ test('friendlyErrors : capture compilation without errors', t => {
   });
 
   assert.deepEqual(logs, [
-    'Compiled successfully in 100ms'
+    ' DONE  Compiled successfully in 100ms',
+    ''
   ]);
 });
 

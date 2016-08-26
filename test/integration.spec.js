@@ -12,8 +12,7 @@ test('integration : module-errors', t => {
   });
 
   assert.deepEqual(logs, [
-    '',
-    'Failed to compile with 2 errors',
+    ' ERROR  Failed to compile with 2 errors',
     '',
     'These dependencies were not found in node_modules:',
     '',
@@ -31,10 +30,9 @@ test('integration : should display eslint warnings', t => {
   });
 
   assert.deepEqual(logs, [
+    ' WARNING  Compiled with 1 warnings',
     '',
-    'Failed to compile with 1 warnings',
-    '',
-    '1) warning in ./fixtures/eslint-warnings/index.js',
+    ' warning  in ./fixtures/eslint-warnings/index.js',
     '',
     `${__dirname}/fixtures/eslint-warnings/index.js
   1:7  warning  'unused' is defined but never used  no-unused-vars
@@ -55,10 +53,9 @@ test('integration : babel syntax error', t => {
   });
 
   assert.deepEqual(logs, [
+    ' ERROR  Failed to compile with 1 errors',
     '',
-    'Failed to compile with 1 errors',
-    '',
-    '1) error in ./fixtures/babel-syntax/index.js',
+    ' error  in ./fixtures/babel-syntax/index.js',
     '',
     `Module build failed: SyntaxError: Unexpected token (5:11)
 

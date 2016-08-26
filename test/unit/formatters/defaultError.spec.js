@@ -8,7 +8,7 @@ const error = { message: 'Error message', file: './src/index.js' };
 
 test('Formats errors with no type', () => {
   expect(noColor(defaultError([error], 'Warning'))).toEqual([
-    '1) Warning in ./src/index.js',
+    ' Warning  in ./src/index.js',
     '',
     'Error message',
     '',

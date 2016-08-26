@@ -1,6 +1,6 @@
 'use strict';
 
-
+const colors = require('./utils/colors');
 const chalk = require('chalk');
 
 class Debugger {
@@ -32,6 +32,22 @@ class Debugger {
     }
   }
 
+  info (message) {
+    if (this.enabled) {
+      const titleFormatted = colors.formatTitle('info', 'I');
+      this.log(titleFormatted, message);
+    }
+  }
+
+  title (severity, title, subtitle) {
+    if (this.enabled) {
+      const titleFormatted = colors.formatTitle(severity, title);
+      const subTitleFormatted = colors.formatText(severity, subtitle);
+      this.log(titleFormatted, subTitleFormatted);
+      this.log();
+    }
+  }
+
   clearConsole () {
     if (!this.capturing && this.enabled) {
       process.stdout.write('\x1bc');
@@ -57,6 +73,10 @@ class Debugger {
       method.apply(console, args);
     }
   }
+}
+
+function capitalizeFirstLetter (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 module.exports = new Debugger();

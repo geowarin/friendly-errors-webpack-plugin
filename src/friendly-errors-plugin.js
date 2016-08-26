@@ -44,18 +44,18 @@ class FriendlyErrorsWebpackPlugin {
       }
 
       if (hasErrors) {
-        this.displayErrors(stats.compilation.errors, 'error', 'red');
+        this.displayErrors(stats.compilation.errors, 'error');
         return;
       }
 
       if (hasWarnings) {
-        this.displayErrors(stats.compilation.warnings, 'warning', 'yellow');
+        this.displayErrors(stats.compilation.warnings, 'warning');
       }
     });
 
     compiler.plugin('invalid', () => {
       this.clearConsole();
-      output.log(chalk.cyan('Compiling...'));
+      output.title('info', 'WAIT', 'Compiling...');
     });
   }
 
@@ -67,25 +67,27 @@ class FriendlyErrorsWebpackPlugin {
 
   displaySuccess(stats) {
     const time = stats.endTime - stats.startTime;
-    output.log(chalk.green('Compiled successfully in ' + time + 'ms'));
+    output.title('success', 'DONE', 'Compiled successfully in ' + time + 'ms');
 
     if (this.compilationSuccessMessage) {
-      output.log(this.compilationSuccessMessage);
+      output.info(this.compilationSuccessMessage);
     }
   }
 
-  displayErrors(errors, level, color) {
+  displayErrors(errors, severity) {
 
     const processedErrors = transformErrors(errors, this.transformers);
     const nbErrors = processedErrors.length;
-    displayCompilationMessage(`Failed to compile with ${nbErrors} ${level}s`, color);
+
+    const subtitle =  severity === 'error' ? `Failed to compile with ${nbErrors} ${severity}s` : `Compiled with ${nbErrors} ${severity}s`;
+    output.title(severity, severity.toUpperCase(), subtitle);
 
     if (this.onErrors) {
-      this.onErrors(level, processedErrors);
+      this.onErrors(severity, processedErrors);
     }
 
     const topErrors = getMaxSeverityErrors(processedErrors);
-    formatErrors(topErrors, this.formatters, level)
+    formatErrors(topErrors, this.formatters, severity)
       .forEach((chunk) => output.log(chunk));
   }
 }
