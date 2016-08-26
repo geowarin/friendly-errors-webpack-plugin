@@ -23,7 +23,7 @@ class FriendlyErrorsWebpackPlugin {
 
   constructor (options) {
     options = options || {};
-    this.compilationSuccessMessage = options.compilationSuccessMessage;
+    this.compilationSuccessInfo = options.compilationSuccessInfo || {};
     this.onErrors = options.onErrors;
     this.shouldClearConsole = options.clearConsole || true;
     this.formatters = concat(defaultFormatters, options.additionalFormatters);
@@ -69,15 +69,21 @@ class FriendlyErrorsWebpackPlugin {
     const time = stats.endTime - stats.startTime;
     output.title('success', 'DONE', 'Compiled successfully in ' + time + 'ms');
 
-    if (this.compilationSuccessMessage) {
-      output.info(this.compilationSuccessMessage);
+    if (this.compilationSuccessInfo.messages) {
+      this.compilationSuccessInfo.messages.forEach(message => output.info(message));
+    }
+    if (this.compilationSuccessInfo.notes) {
+      output.log();
+      this.compilationSuccessInfo.notes.forEach(note => output.note(note));
     }
   }
 
   displayErrors(errors, severity) {
 
     const processedErrors = transformErrors(errors, this.transformers);
-    const nbErrors = processedErrors.length;
+
+    const topErrors = getMaxSeverityErrors(processedErrors);
+    const nbErrors = topErrors.length;
 
     const subtitle =  severity === 'error' ? `Failed to compile with ${nbErrors} ${severity}s` : `Compiled with ${nbErrors} ${severity}s`;
     output.title(severity, severity.toUpperCase(), subtitle);
@@ -86,7 +92,6 @@ class FriendlyErrorsWebpackPlugin {
       this.onErrors(severity, processedErrors);
     }
 
-    const topErrors = getMaxSeverityErrors(processedErrors);
     formatErrors(topErrors, this.formatters, severity)
       .forEach((chunk) => output.log(chunk));
   }

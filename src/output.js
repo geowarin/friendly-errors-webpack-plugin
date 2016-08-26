@@ -39,6 +39,13 @@ class Debugger {
     }
   }
 
+  note (message) {
+    if (this.enabled) {
+      const titleFormatted = colors.formatTitle('note', 'N');
+      this.log(titleFormatted, message);
+    }
+  }
+
   title (severity, title, subtitle) {
     if (this.enabled) {
       const titleFormatted = colors.formatTitle(severity, title);

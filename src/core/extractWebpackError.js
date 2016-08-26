@@ -27,7 +27,10 @@ function getOriginalErrorStack(e) {
   while (e.error != null) {
     e = e.error;
   }
-  return ErrorStackParser.parse(e);
+  if (e.stack) {
+    return ErrorStackParser.parse(e);
+  }
+  return [];
 }
 
 function getFile (e) {

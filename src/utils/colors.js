@@ -19,6 +19,7 @@ function textColor(serverity) {
   switch (serverity.toLowerCase()) {
     case 'success': return 'green';
     case 'info': return 'blue';
+    case 'note': return 'white';
     case 'warning': return 'yellow';
     case 'error': return 'red';
     default: return 'red';
