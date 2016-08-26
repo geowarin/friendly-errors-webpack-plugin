@@ -11,7 +11,7 @@
     "react",
     "cli"
   ],
-  "author": "Geoffroy Warin",@
+  "author": "Geoffroy Warin",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/geowarin/friendly-errors-webpack-plugin.git"
