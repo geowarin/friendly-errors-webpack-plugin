@@ -41,7 +41,10 @@ test('integration : should display eslint warnings', t => {
 
 ✖ 1 problem (0 errors, 1 warning)
 `,
-    ''
+    '',
+    'You may use special comments to disable some warnings.',
+    'Use // eslint-disable-next-line to ignore the next line.',
+    'Use /* eslint-disable */ to ignore all warnings in a file.'
   ]);
 });
 

@@ -3,7 +3,8 @@ const expect = require('expect');
 const test = require('ava');
 
 const error = {
-  type: 'module-not-found',
+  name: 'ModuleNotFoundError',
+  message: 'Module not found : redux',
   webpackError: {
     dependencies: [{ request: 'redux' } ],
   },

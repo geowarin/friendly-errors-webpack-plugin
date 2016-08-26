@@ -6,10 +6,12 @@ const os = require('os');
 const transformErrors = require('./core/transformErrors');
 const formatErrors = require('./core/formatErrors');
 const output = require('./output');
+const concat = require('./utils').concat;
 
 const defaultTransformers = [
   require('./transformers/babelSyntax'),
   require('./transformers/moduleNotFound'),
+  require('./transformers/esLintError'),
 ];
 
 const defaultFormatters = [
@@ -97,15 +99,6 @@ function getMaxInt(collection, propertyName) {
   return collection.reduce((res, curr) => {
     return curr[propertyName] > res ? curr[propertyName] : res;
   }, 0)
-}
-
-/**
- * Concat and flattens non-null values. First arg must be an array.
- * Ex: concat([1], undefined, 2, [3, 4]) = [1, 2, 3, 4]
- */
-function concat() {
-  var args = Array.from(arguments).filter(e => e);
-  return Array.prototype.concat.apply(args[0], args.slice(1));
 }
 
 module.exports = FriendlyErrorsWebpackPlugin;

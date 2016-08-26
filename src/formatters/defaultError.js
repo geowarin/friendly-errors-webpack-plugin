@@ -1,17 +1,19 @@
 'use strict';
 
 const chalk = require('chalk');
+const concat = require('../utils').concat;
 
 function displayError(index, severity, error) {
   const baseError = chalk.red(`${index + 1}) ${severity}`);
 
-  return [
+  return concat(
     `${baseError} ${error.file ? 'in ' + error.file : ''}`,
     '',
     error.message,
     (error.origin ? error.origin : undefined),
-    ''
-  ].filter(chunk => chunk !== undefined);
+    '',
+    error.infos
+  );
 }
 
 function isDefaultError(error) {

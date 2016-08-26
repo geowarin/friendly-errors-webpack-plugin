@@ -4,10 +4,10 @@ const TYPE = 'module-not-found';
 
 function isModuleNotFoundError (e) {
   const webpackError = e.webpackError || {};
-  return webpackError.dependencies && webpackError.dependencies.length &&
-    (e.type === TYPE ||
-     e.name === 'ModuleNotFoundError' &&
-     e.message.indexOf('Module not found') === 0);
+  return webpackError.dependencies
+    && webpackError.dependencies.length > 0
+    && e.name === 'ModuleNotFoundError'
+    && e.message.indexOf('Module not found') === 0;
 }
 
 function transform(error) {
@@ -18,7 +18,7 @@ function transform(error) {
       message: `Module not found ${module}`,
       type: TYPE,
       severity: 900,
-      module,
+      module
     });
   }
 

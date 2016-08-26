@@ -1,5 +1,6 @@
 'use strict';
 
+const ErrorStackParser = require('error-stack-parser');
 const RequestShortener = require("webpack/lib/RequestShortener");
 
 // TODO: allow the location to be customized in options
@@ -18,7 +19,15 @@ function extractError (e) {
     name: e.name,
     severity: 0,
     webpackError: e,
+    originalStack: getOriginalErrorStack(e)
   };
+}
+
+function getOriginalErrorStack(e) {
+  while (e.error != null) {
+    e = e.error;
+  }
+  return ErrorStackParser.parse(e);
 }
 
 function getFile (e) {
