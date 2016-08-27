@@ -1,4 +1,5 @@
 'use strict';
+const concat = require('../utils').concat;
 
 function dependenciesNotFound (count) {
   if (count === 1) {
@@ -21,12 +22,13 @@ function formatErrors (errors) {
     return [];
   }
 
-  return [
+  return concat(
     dependenciesNotFound(errors.length),
-    ''
-  ]
-    .concat(errors.map(e =>`* ${e.module}`))
-    .concat('', forgetToInstall(errors.length));
+    '',
+    errors.map(e =>`* ${e.module}`),
+    '',
+    forgetToInstall(errors.length)
+  );
 }
 
 function format (errors) {

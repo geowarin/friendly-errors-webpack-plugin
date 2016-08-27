@@ -89,7 +89,7 @@ class FriendlyErrorsWebpackPlugin {
     output.title(severity, severity.toUpperCase(), subtitle);
 
     if (this.onErrors) {
-      this.onErrors(severity, processedErrors);
+      this.onErrors(severity, topErrors);
     }
 
     formatErrors(topErrors, this.formatters, severity)
