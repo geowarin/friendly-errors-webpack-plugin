@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Concat and flattens non-null values.
  * Ex: concat(1, undefined, 2, [3, 4]) = [1, 2, 3, 4]

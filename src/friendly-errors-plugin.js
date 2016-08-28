@@ -21,16 +21,16 @@ const defaultFormatters = [
 
 class FriendlyErrorsWebpackPlugin {
 
-  constructor (options) {
-    options = options || {};
-    this.compilationSuccessInfo = options.compilationSuccessInfo || {};
+  constructor(options) {
+    options = options || {};
+    this.compilationSuccessInfo = options.compilationSuccessInfo || {};
     this.onErrors = options.onErrors;
     this.shouldClearConsole = options.clearConsole || true;
     this.formatters = concat(defaultFormatters, options.additionalFormatters);
     this.transformers = concat(defaultTransformers, options.additionalTransformers);
   }
 
-  apply (compiler) {
+  apply(compiler) {
 
     compiler.plugin('done', stats => {
       this.clearConsole();
@@ -79,13 +79,14 @@ class FriendlyErrorsWebpackPlugin {
   }
 
   displayErrors(errors, severity) {
-
     const processedErrors = transformErrors(errors, this.transformers);
 
     const topErrors = getMaxSeverityErrors(processedErrors);
     const nbErrors = topErrors.length;
 
-    const subtitle =  severity === 'error' ? `Failed to compile with ${nbErrors} ${severity}s` : `Compiled with ${nbErrors} ${severity}s`;
+    const subtitle = severity === 'error' ?
+      `Failed to compile with ${nbErrors} ${severity}s` :
+      `Compiled with ${nbErrors} ${severity}s`;
     output.title(severity, severity.toUpperCase(), subtitle);
 
     if (this.onErrors) {
@@ -93,11 +94,11 @@ class FriendlyErrorsWebpackPlugin {
     }
 
     formatErrors(topErrors, this.formatters, severity)
-      .forEach((chunk) => output.log(chunk));
+      .forEach(chunk => output.log(chunk));
   }
 }
 
-function getMaxSeverityErrors (errors) {
+function getMaxSeverityErrors(errors) {
   const maxSeverity = getMaxInt(errors, 'severity');
   return errors.filter(e => e.severity === maxSeverity);
 }
@@ -109,9 +110,3 @@ function getMaxInt(collection, propertyName) {
 }
 
 module.exports = FriendlyErrorsWebpackPlugin;
-
-function displayCompilationMessage (message, color) {
-  output.log();
-  output.log(chalk[color](message));
-  output.log();
-}
