@@ -18,7 +18,8 @@ function transform(error) {
       message: `Module not found ${module}`,
       type: TYPE,
       severity: 900,
-      module
+      module,
+      name: 'Module not found'
     });
   }
 

@@ -14,7 +14,8 @@ function transform(error) {
         'You may use special comments to disable some warnings.',
         'Use ' + chalk.yellow('// eslint-disable-next-line') + ' to ignore the next line.',
         'Use ' + chalk.yellow('/* eslint-disable */') + ' to ignore all warnings in a file.'
-      ]
+      ],
+      name: 'Lint error',
     });
   }
 
