@@ -10,6 +10,30 @@ Developer Experience.
 It is easy to add types of errors so if you would like to see more
 errors get handled, please open a [PR](https://help.github.com/articles/creating-a-pull-request/)!
 
+## Getting started
+
+### Installation
+
+```bash
+npm install friendly-errors-webpack-plugin --save-dev
+```
+
+### Basic usage
+
+Simply add `FriendlyErrorsWebpackPlugin` to the plugin section in your Webpack config. 
+
+```javascript
+var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+
+var webpackConfig = {
+  // ...
+  plugins: [
+    new FriendlyErrorsWebpackPlugin(),
+  ],
+  // ...
+}
+```
+
 ## Demo
 
 ### Build success
