@@ -20,7 +20,7 @@ npm install friendly-errors-webpack-plugin --save-dev
 
 ### Basic usage
 
-Simply add `FriendlyErrorsWebpackPlugin` to the plugin section in your Webpack config. 
+Simply add `FriendlyErrorsWebpackPlugin` to the plugin section in your Webpack config.
 
 ```javascript
 var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
@@ -33,6 +33,27 @@ var webpackConfig = {
   // ...
 }
 ```
+
+### Turn off errors
+
+You need to turn off all error logging by setting your webpack config quiet option to true.
+
+```javascript
+app.use(require('webpack-dev-middleware')(compiler, {
+  quiet: true,
+  publicPath: config.output.publicPath,
+}));
+```
+
+If you use webpack-hot-middleware, that is done by setting the log option to a no-op. You can do something sort of like this, depending upon your setup:
+
+```javascript
+app.use(require('webpack-hot-middleware')(compiler, {
+  log: () => {}
+}));
+```
+
+_Thanks to [webpack-dashboard](https://github.com/FormidableLabs/webpack-dashboard) for this piece of info._
 
 ## Demo
 
@@ -69,7 +90,7 @@ new FriendlyErrorsPlugin({
   // should the console be cleared between each compilation?
   // default is true
   shouldClearConsole: true,
-  
+
   // add formatters and transformers (see below)
   additionalFormatters: [],
   additionalTransformers: []
@@ -108,7 +129,7 @@ new NotifierPlugin({
 ### Transformers and formatters
 
 Webpack's errors processing, is done in four phases:
- 
+
 1. Extract relevant info from webpack errors. This is done by the plugin [here](https://github.com/geowarin/friendly-errors-webpack-plugin/blob/master/src/core/extractWebpackError.js)
 2. Apply transformers to all errors to identify and annotate well know errors and give them a priority
 3. Get only top priority error or top priority warnings if no errors are thrown
