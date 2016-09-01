@@ -45,6 +45,21 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }));
 ```
 
+If you use the webpack-dev-server, there is a setting in webpack's ```devServer``` options:
+
+```javascript
+// webpack config root
+{
+  // ...
+  devServer: {
+    // ...
+    quiet: true,
+    // ...
+  },
+  // ...
+}
+```
+
 If you use webpack-hot-middleware, that is done by setting the log option to a no-op. You can do something sort of like this, depending upon your setup:
 
 ```javascript
