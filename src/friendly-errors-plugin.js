@@ -3,6 +3,7 @@
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
+const uniqby = require('lodash.uniqby');
 const transformErrors = require('./core/transformErrors');
 const formatErrors = require('./core/formatErrors');
 const output = require('./output');
@@ -44,12 +45,12 @@ class FriendlyErrorsWebpackPlugin {
       }
 
       if (hasErrors) {
-        this.displayErrors(stats.compilation.errors, 'error');
+        this.displayErrors(extractErrorsFromStats(stats, 'errors'), 'error');
         return;
       }
 
       if (hasWarnings) {
-        this.displayErrors(stats.compilation.warnings, 'warning');
+        this.displayErrors(extractErrorsFromStats(stats, 'warnings'), 'warning');
       }
     });
 
@@ -66,7 +67,7 @@ class FriendlyErrorsWebpackPlugin {
   }
 
   displaySuccess(stats) {
-    const time = stats.endTime - stats.startTime;
+    const time = getCompileTime(stats);
     output.title('success', 'DONE', 'Compiled successfully in ' + time + 'ms');
 
     if (this.compilationSuccessInfo.messages) {
@@ -96,6 +97,31 @@ class FriendlyErrorsWebpackPlugin {
     formatErrors(topErrors, this.formatters, severity)
       .forEach(chunk => output.log(chunk));
   }
+}
+
+function extractErrorsFromStats(stats, type) {
+  if (isMultiStats(stats)) {
+    const errors = stats.stats
+      .reduce((errors, stats) => errors.concat(extractErrorsFromStats(stats, type)), []);
+    // Dedupe to avoid showing the same error many times when multiple
+    // compilers depend on the same module.
+    return uniqby(errors, error => error.message);
+  }
+  return stats.compilation[type];
+}
+
+function getCompileTime(stats) {
+  if (isMultiStats(stats)) {
+    // Webpack multi compilations run in parallel so using the longest duration.
+    // https://webpack.github.io/docs/configuration.html#multiple-configurations
+    return stats.stats
+      .reduce((time, stats) => Math.max(time, getCompileTime(stats)), 0);
+  }
+  return stats.endTime - stats.startTime;
+}
+
+function isMultiStats(stats) {
+  return stats.stats;
 }
 
 function getMaxSeverityErrors(errors) {
