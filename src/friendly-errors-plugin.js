@@ -3,11 +3,13 @@
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
-const uniqby = require('lodash.uniqby');
 const transformErrors = require('./core/transformErrors');
 const formatErrors = require('./core/formatErrors');
 const output = require('./output');
-const concat = require('./utils').concat;
+const utils = require('./utils');
+
+const concat = utils.concat;
+const uniqueBy = utils.uniqueBy;
 
 const defaultTransformers = [
   require('./transformers/babelSyntax'),
@@ -105,7 +107,7 @@ function extractErrorsFromStats(stats, type) {
       .reduce((errors, stats) => errors.concat(extractErrorsFromStats(stats, type)), []);
     // Dedupe to avoid showing the same error many times when multiple
     // compilers depend on the same module.
-    return uniqby(errors, error => error.message);
+    return uniqueBy(errors, error => error.message);
   }
   return stats.compilation[type];
 }

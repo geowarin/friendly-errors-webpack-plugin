@@ -1,14 +1,16 @@
 const test = require('ava');
-const output = require("../src/output");
+const output = require('../src/output');
 const deasync = require('deasync');
-var assert = require('assert-diff');
+const assert = require('assert-diff');
+const webpack = require('webpack');
+const FriendlyErrorsWebpackPlugin = require('../src/friendly-errors-plugin');
 
-const webpack = deasync(require('webpack'));
+const syncWebpack = deasync(webpack);
 
 test('integration : module-errors', t => {
 
   var logs = output.captureLogs(() => {
-    webpack(require('./fixtures/module-errors/webpack.config.js'));
+    syncWebpack(require('./fixtures/module-errors/webpack.config.js'));
   });
 
   assert.deepEqual(logs, [
@@ -26,7 +28,7 @@ test('integration : module-errors', t => {
 test('integration : should display eslint warnings', t => {
 
   var logs = output.captureLogs(() => {
-    webpack(require('./fixtures/eslint-warnings/webpack.config.js'));
+    syncWebpack(require('./fixtures/eslint-warnings/webpack.config.js'));
   });
 
   assert.deepEqual(logs, [
@@ -49,7 +51,7 @@ test('integration : should display eslint warnings', t => {
 test('integration : babel syntax error', t => {
 
   var logs = output.captureLogs(() => {
-    webpack(require('./fixtures/babel-syntax/webpack.config'));
+    syncWebpack(require('./fixtures/babel-syntax/webpack.config'));
   });
 
   assert.deepEqual(logs, [
@@ -67,4 +69,21 @@ test('integration : babel syntax error', t => {
   7 | }`,
     ''
   ]);
+});
+
+test('integration : webpack multi compiler', t => {
+
+  const syncWebpackWithPlugin = deasync(function(config, fn) {
+    const compiler = webpack(config);
+    // Plugin must be applied to `MultiCompiler` rather than via webpack.config.
+    compiler.apply(new FriendlyErrorsWebpackPlugin());
+    compiler.run(fn);
+    return compiler;
+  });
+
+  var logs = output.captureLogs(() => {
+    syncWebpackWithPlugin(require('./fixtures/multi-compiler/webpack.config'));
+  });
+
+  assert(/DONE  Compiled successfully in /.test(logs));
 });
