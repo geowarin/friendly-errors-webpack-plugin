@@ -19,7 +19,7 @@ test('concat should handle arrays', () => {
   );
 });
 
-test('uniqueBy should filter based on predicate', () => {
+test('uniqueBy should dedupe based on criterion returned from iteratee function', () => {
   const result = uniqueBy([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 3 }], function(val) {
     return val.id;
   });
