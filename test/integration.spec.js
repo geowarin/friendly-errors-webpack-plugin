@@ -18,7 +18,7 @@ const syncWebpackWithPlugin = deasync(function(config, fn) {
 test('integration : success', t => {
 
   var logs = output.captureLogs(() => {
-    syncWebpackWithPlugin(require('./fixtures/success/webpack.config'));
+    syncWebpack(require('./fixtures/success/webpack.config'));
   });
 
   assert(
