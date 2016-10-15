@@ -7,6 +7,27 @@ const FriendlyErrorsWebpackPlugin = require('../src/friendly-errors-plugin');
 
 const syncWebpack = deasync(webpack);
 
+// Applys plugin directly to compiler to support `MultiCompiler` tests.
+const syncWebpackWithPlugin = deasync(function(config, fn) {
+  const compiler = webpack(config);
+  compiler.apply(new FriendlyErrorsWebpackPlugin());
+  compiler.run(fn);
+  return compiler;
+});
+
+test('integration : success', t => {
+
+  var logs = output.captureLogs(() => {
+    syncWebpackWithPlugin(require('./fixtures/success/webpack.config'));
+  });
+
+  assert(
+    /DONE  Compiled successfully in (.\d*)ms/.test(logs),
+    'Expected logs to include \'DONE  Compiled successfully in {{number}}ms\''
+  );
+});
+
+
 test('integration : module-errors', t => {
 
   var logs = output.captureLogs(() => {
@@ -71,19 +92,32 @@ test('integration : babel syntax error', t => {
   ]);
 });
 
-test('integration : webpack multi compiler', t => {
-
-  const syncWebpackWithPlugin = deasync(function(config, fn) {
-    const compiler = webpack(config);
-    // Plugin must be applied to `MultiCompiler` rather than via webpack.config.
-    compiler.apply(new FriendlyErrorsWebpackPlugin());
-    compiler.run(fn);
-    return compiler;
-  });
+test('integration : webpack multi compiler : success', t => {
 
   var logs = output.captureLogs(() => {
-    syncWebpackWithPlugin(require('./fixtures/multi-compiler/webpack.config'));
+    syncWebpackWithPlugin(require('./fixtures/multi-compiler-success/webpack.config'));
   });
 
-  assert(/DONE  Compiled successfully in /.test(logs));
+  assert(
+    /DONE  Compiled successfully in (.\d*)ms/.test(logs),
+    'Expected logs to include \'DONE  Compiled successfully in {{number}}ms\''
+  );
+});
+
+test('integration : webpack multi compiler : module-errors', t => {
+
+  var logs = output.captureLogs(() => {
+    syncWebpackWithPlugin(require('./fixtures/multi-compiler-module-errors/webpack.config'));
+  });
+
+  assert.deepEqual(logs, [
+    ' ERROR  Failed to compile with 2 errors',
+    '',
+    'These dependencies were not found in node_modules:',
+    '',
+    '* ./non-existing',
+    '* not-found',
+    '',
+    'Did you forget to run npm install --save for them?'
+  ]);
 });
