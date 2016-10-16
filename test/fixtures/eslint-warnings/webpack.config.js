@@ -11,14 +11,13 @@ module.exports = {
 
   ],
   module: {
-    preLoaders: [
+    loaders: [
       {
         test: /\.js$/,
         loader: 'eslint',
+        enforce: 'pre',
         include: __dirname
-      }
-    ],
-    loaders: [
+      },
       {
         test: /\.jsx?$/,
         loader: 'babel',
