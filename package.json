@@ -6,6 +6,10 @@
   "scripts": {
     "test": "ava"
   },
+  "files": [
+    "src",
+    "index.js"
+  ],
   "keywords": [
     "awesome",
     "react",
