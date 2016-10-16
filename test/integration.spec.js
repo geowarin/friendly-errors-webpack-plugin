@@ -58,7 +58,7 @@ test('integration : should display eslint warnings', t => {
     ' warning  in ./fixtures/eslint-warnings/index.js',
     '',
     `${__dirname}/fixtures/eslint-warnings/index.js
-  1:7  warning  'unused' is defined but never used  no-unused-vars
+  1:7  warning  'unused' is assigned a value but never used  no-unused-vars
 
 ✖ 1 problem (0 errors, 1 warning)
 `,
