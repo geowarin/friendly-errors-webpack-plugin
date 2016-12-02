@@ -28,7 +28,7 @@ class FriendlyErrorsWebpackPlugin {
     options = options || {};
     this.compilationSuccessInfo = options.compilationSuccessInfo || {};
     this.onErrors = options.onErrors;
-    this.shouldClearConsole = Boolean(options.clearConsole);
+    this.shouldClearConsole = options.clearConsole == null ? true : Boolean(options.clearConsole);
     this.formatters = concat(defaultFormatters, options.additionalFormatters);
     this.transformers = concat(defaultTransformers, options.additionalTransformers);
   }

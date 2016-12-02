@@ -39,6 +39,16 @@ test('friendlyErrors : capture compilation without errors', t => {
   ]);
 });
 
+test('friendlyErrors : default clearConsole option', t => {
+  const plugin = new FriendlyErrorsPlugin();
+  assert.strictEqual(plugin.shouldClearConsole, true)
+});
+
+test('friendlyErrors : clearConsole option', t => {
+  const plugin = new FriendlyErrorsPlugin({ clearConsole: false });
+  assert.strictEqual(plugin.shouldClearConsole, false)
+});
+
 function successfulCompilationStats() {
   const compilation = {
     errors: [],
