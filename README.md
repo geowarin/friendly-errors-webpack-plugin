@@ -104,7 +104,7 @@ new FriendlyErrorsPlugin({
   },
   // should the console be cleared between each compilation?
   // default is true
-  shouldClearConsole: true,
+  clearConsole: true,
 
   // add formatters and transformers (see below)
   additionalFormatters: [],
