@@ -1,6 +1,5 @@
 const formatErrors = require('../../src/core/formatErrors');
 const expect = require('expect');
-const test = require('ava');
 
 const simple = (errors) => errors
   .filter(({ type }) => !type).map(({ message }) => message);
@@ -13,7 +12,7 @@ const notFound = (errors) => errors
 
 const formatters = [allCaps];
 
-test('formats the error based on the matching formatters', () => {
+it('formats the error based on the matching formatters', () => {
   const errors = [
     { message: 'Error 1', type: undefined },
     { message: 'Error 2', type: 'other' },

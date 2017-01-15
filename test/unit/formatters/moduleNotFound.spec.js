@@ -1,8 +1,7 @@
 const moduleNotFound = require('../../../src/formatters/moduleNotFound');
 const expect = require('expect');
-const test = require('ava');
 
-test('Formats module-not-found errors', () => {
+it('Formats module-not-found errors', () => {
   const error = { type: 'module-not-found', module: 'redux' };
   expect(moduleNotFound([error])).toEqual([
     'This dependency was not found in node_modules:',
@@ -13,7 +12,7 @@ test('Formats module-not-found errors', () => {
   ]);
 });
 
-test('Groups all module-not-found into one', () => {
+it('Groups all module-not-found into one', () => {
   const reduxError = { type: 'module-not-found', module: 'redux' };
   const reactError = { type: 'module-not-found', module: 'react' };
   expect(moduleNotFound([reduxError, reactError])).toEqual([
@@ -26,7 +25,7 @@ test('Groups all module-not-found into one', () => {
   ]);
 });
 
-test('Does not format other errors', () => {
+it('Does not format other errors', () => {
   const otherError = { type: 'other-error', module: 'foo' };
   expect(moduleNotFound([otherError])).toEqual([]);
 });

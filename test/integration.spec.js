@@ -1,7 +1,5 @@
-const test = require('ava');
 const output = require('../src/output');
 const deasync = require('deasync');
-const assert = require('assert-diff');
 const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('../src/friendly-errors-plugin');
 const MemoryFileSystem = require('memory-fs');
@@ -17,26 +15,23 @@ const syncWebpackWithPlugin = deasync(function(config, fn) {
   return compiler;
 });
 
-test('integration : success', t => {
+it('integration : success', () => {
 
-  var logs = output.captureLogs(() => {
+  const logs = output.captureLogs(() => {
     syncWebpack(require('./fixtures/success/webpack.config'));
   });
 
-  assert(
-    /DONE  Compiled successfully in (.\d*)ms/.test(logs),
-    'Expected logs to include \'DONE  Compiled successfully in {{number}}ms\''
-  );
+  expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/);
 });
 
 
-test('integration : module-errors', t => {
+it('integration : module-errors', () => {
 
-  var logs = output.captureLogs(() => {
+  const logs = output.captureLogs(() => {
     syncWebpack(require('./fixtures/module-errors/webpack.config.js'));
   });
 
-  assert.deepEqual(logs, [
+  expect(logs).toEqual([
     ' ERROR  Failed to compile with 2 errors',
     '',
     'These dependencies were not found in node_modules:',
@@ -48,16 +43,16 @@ test('integration : module-errors', t => {
   ]);
 });
 
-test('integration : should display eslint warnings', t => {
+it('integration : should display eslint warnings', () => {
 
-  var logs = output.captureLogs(() => {
+  const logs = output.captureLogs(() => {
     syncWebpack(require('./fixtures/eslint-warnings/webpack.config.js'));
   });
 
-  assert.deepEqual(logs, [
+  expect(logs).toEqual([
     ' WARNING  Compiled with 1 warnings',
     '',
-    ' warning  in ./fixtures/eslint-warnings/index.js',
+    ' warning  in ./test/fixtures/eslint-warnings/index.js',
     '',
     `${__dirname}/fixtures/eslint-warnings/index.js
   1:7  warning  'unused' is assigned a value but never used  no-unused-vars
@@ -71,16 +66,16 @@ test('integration : should display eslint warnings', t => {
   ]);
 });
 
-test('integration : babel syntax error', t => {
+it('integration : babel syntax error', () => {
 
-  var logs = output.captureLogs(() => {
+  const logs = output.captureLogs(() => {
     syncWebpack(require('./fixtures/babel-syntax/webpack.config'));
   });
 
-  assert.deepEqual(logs, [
+  expect(logs).toEqual([
     ' ERROR  Failed to compile with 1 errors',
     '',
-    ' error  in ./fixtures/babel-syntax/index.js',
+    ' error  in ./test/fixtures/babel-syntax/index.js',
     '',
     `SyntaxError: Unexpected token (5:11)
 
@@ -94,25 +89,22 @@ test('integration : babel syntax error', t => {
   ]);
 });
 
-test('integration : webpack multi compiler : success', t => {
+it('integration : webpack multi compiler : success', () => {
 
-  var logs = output.captureLogs(() => {
+  const logs = output.captureLogs(() => {
     syncWebpackWithPlugin(require('./fixtures/multi-compiler-success/webpack.config'));
   });
 
-  assert(
-    /DONE  Compiled successfully in (.\d*)ms/.test(logs),
-    'Expected logs to include \'DONE  Compiled successfully in {{number}}ms\''
-  );
+  expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/)
 });
 
-test('integration : webpack multi compiler : module-errors', t => {
+it('integration : webpack multi compiler : module-errors', () => {
 
-  var logs = output.captureLogs(() => {
+  const logs = output.captureLogs(() => {
     syncWebpackWithPlugin(require('./fixtures/multi-compiler-module-errors/webpack.config'));
   });
 
-  assert.deepEqual(logs, [
+  expect(logs).toEqual([
     ' ERROR  Failed to compile with 2 errors',
     '',
     'These dependencies were not found in node_modules:',

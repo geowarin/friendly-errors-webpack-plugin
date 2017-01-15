@@ -1,52 +1,49 @@
 const expect = require('expect');
-const test = require('ava');
 const EventEmitter = require('events');
 const Stats = require('webpack/lib/Stats');
 const Module = require('webpack/lib/Module');
 EventEmitter.prototype.plugin = EventEmitter.prototype.on;
-var assert = require('assert-diff');
 
 const output = require("../../../src/output");
 const FriendlyErrorsPlugin = require("../../../index");
 
 const notifierPlugin = new FriendlyErrorsPlugin();
-var mockCompiler = new EventEmitter();
+const mockCompiler = new EventEmitter();
 notifierPlugin.apply(mockCompiler);
 
-test('friendlyErrors : capture invalid message', t => {
+it('friendlyErrors : capture invalid message', () => {
 
-  var logs = output.captureLogs(() => {
+  const logs = output.captureLogs(() => {
     mockCompiler.emit('invalid');
   });
 
-  assert.deepEqual(logs, [
+  expect(logs).toEqual([
     ' WAIT  Compiling...',
     ''
-    ]
-  );
+    ]);
 });
 
-test('friendlyErrors : capture compilation without errors', t => {
+it('friendlyErrors : capture compilation without errors', () => {
 
-  var stats = successfulCompilationStats();
-  var logs = output.captureLogs(() => {
+  const stats = successfulCompilationStats();
+  const logs = output.captureLogs(() => {
     mockCompiler.emit('done', stats);
   });
 
-  assert.deepEqual(logs, [
+  expect(logs).toEqual([
     ' DONE  Compiled successfully in 100ms',
     ''
   ]);
 });
 
-test('friendlyErrors : default clearConsole option', t => {
+it('friendlyErrors : default clearConsole option', () => {
   const plugin = new FriendlyErrorsPlugin();
-  assert.strictEqual(plugin.shouldClearConsole, true)
+  expect(plugin.shouldClearConsole).toBeTruthy()
 });
 
-test('friendlyErrors : clearConsole option', t => {
+it('friendlyErrors : clearConsole option', () => {
   const plugin = new FriendlyErrorsPlugin({ clearConsole: false });
-  assert.strictEqual(plugin.shouldClearConsole, false)
+  expect(plugin.shouldClearConsole).toBeFalsy()
 });
 
 function successfulCompilationStats() {

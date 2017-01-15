@@ -1,12 +1,11 @@
 const defaultError = require('../../../src/formatters/defaultError');
 const expect = require('expect');
-const test = require('ava');
 const chalk = require('chalk');
 
 const noColor = (arr) => arr.map(chalk.stripColor);
 const error = { message: 'Error message', file: './src/index.js' };
 
-test('Formats errors with no type', () => {
+it('Formats errors with no type', () => {
   expect(noColor(defaultError([error], 'Warning'))).toEqual([
     ' Warning  in ./src/index.js',
     '',
@@ -15,7 +14,7 @@ test('Formats errors with no type', () => {
   ]);
 });
 
-test('Does not format other errors', () => {
-  const otherError = { ...error, type: 'other-error' };
+it('Does not format other errors', () => {
+  const otherError = { type: 'other-error' };
   expect(noColor(defaultError([otherError], 'Error'))).toEqual([]);
 });
