@@ -4,12 +4,14 @@ const deasync = require('deasync');
 const assert = require('assert-diff');
 const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('../src/friendly-errors-plugin');
+const MemoryFileSystem = require('memory-fs');
 
 const syncWebpack = deasync(webpack);
 
 // Applys plugin directly to compiler to support `MultiCompiler` tests.
 const syncWebpackWithPlugin = deasync(function(config, fn) {
   const compiler = webpack(config);
+  compiler.outputFileSystem = new MemoryFileSystem();
   compiler.apply(new FriendlyErrorsWebpackPlugin());
   compiler.run(fn);
   return compiler;
