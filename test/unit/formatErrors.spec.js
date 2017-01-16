@@ -2,13 +2,13 @@ const formatErrors = require('../../src/core/formatErrors');
 const expect = require('expect');
 
 const simple = (errors) => errors
-  .filter(({ type }) => !type).map(({ message }) => message);
+  .filter(error => !error.type).map(e => e.message);
 
 const allCaps = (errors) => errors
-  .filter(({ type }) => type == 'other').map((e) => e.message.toUpperCase());
+  .filter(error => error.type == 'other').map(e => e.message.toUpperCase());
 
 const notFound = (errors) => errors
-  .filter(({ type }) => type === 'not-found').map(() => 'Not found');
+  .filter(error => error.type === 'not-found').map(() => 'Not found');
 
 const formatters = [allCaps];
 
