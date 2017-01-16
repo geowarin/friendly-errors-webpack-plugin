@@ -7,13 +7,22 @@ function displayError(severity, error) {
   const baseError = formatTitle(severity, severity);
 
   return concat(
-    `${baseError} ${error.file ? 'in ' + error.file : ''}`,
+    `${baseError} ${removeLoaders(error.file)}`,
     '',
     error.message,
     (error.origin ? error.origin : undefined),
     '',
     error.infos
   );
+}
+
+function removeLoaders(file) {
+  if (!file) {
+    return "";
+  }
+  const split = file.split('!');
+  const filePath = split[split.length - 1];
+  return `in ${filePath}`;
 }
 
 function isDefaultError(error) {
