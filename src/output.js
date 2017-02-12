@@ -2,6 +2,8 @@
 
 const colors = require('./utils/colors');
 const chalk = require('chalk');
+const getCursorPosition = require('get-cursor-position');
+const readline = require('readline')
 
 class Debugger {
 
@@ -9,6 +11,11 @@ class Debugger {
     this.enabled = true;
     this.capturing = false;
     this.capturedMessages = [];
+
+    const currentPosition = getCursorPosition.sync();
+    if(currentPosition && currentPosition.row) {
+      this.cursorPosition = currentPosition.row;
+    }
   }
 
   enable () {
@@ -57,7 +64,15 @@ class Debugger {
 
   clearConsole () {
     if (!this.capturing && this.enabled) {
-      process.stdout.write('\x1bc');
+      // Account for the fact that someone might clear (cmd + k for example) his terminal window
+      const currentPosition = getCursorPosition.sync()
+      if(currentPosition && currentPosition.row) {
+        if(this.cursorPosition > currentPosition.row) {
+          this.cursorPosition = currentPosition.row
+        }
+      }
+      readline.cursorTo(process.stdout,0, this.cursorPosition)
+      readline.clearScreenDown(process.stdout)
     }
   }
 
