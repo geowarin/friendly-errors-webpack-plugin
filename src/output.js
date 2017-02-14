@@ -2,8 +2,8 @@
 
 const colors = require('./utils/colors');
 const chalk = require('chalk');
-const getCursorPosition = require('get-cursor-position');
-const readline = require('readline')
+const getCursorPosition = require('@patrickkettner/get-cursor-position');
+const readline = require('readline');
 
 class Debugger {
 
