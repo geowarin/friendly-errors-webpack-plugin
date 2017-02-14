@@ -14,13 +14,13 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'eslint',
+	loader: 'eslint-loader',
         enforce: 'pre',
         include: __dirname
       },
       {
         test: /\.jsx?$/,
-        loader: 'babel',
+	loader: 'babel-loader',
         exclude: /node_modules/
       }
     ]
