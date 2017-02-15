@@ -55,6 +55,14 @@ class Debugger {
       const subTitleFormatted = colors.formatText(severity, subtitle);
       const message = `${titleFormatted} ${subTitleFormatted}`
 
+      // In test environment we don't include timestamp
+      if(process.env.NODE_ENV === 'test') {
+        this.log(message);
+        this.log();
+        return;
+      }
+
+      // Make timestamp appear at the end of the line
       let logSpace = process.stdout.columns - stringLength(message) - stringLength(dateString)
       if (logSpace <= 0) {
         logSpace = 10
