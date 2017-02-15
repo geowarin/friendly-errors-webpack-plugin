@@ -7,8 +7,6 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - choco install yarn
-  - refreshenv
   - yarn install
 
 test_script:
