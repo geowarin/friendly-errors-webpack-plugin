@@ -4,8 +4,9 @@ const output = require('../src/output');
 const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('../src/friendly-errors-plugin');
 const MemoryFileSystem = require('memory-fs');
+const path = require('path');
 
-const webpackPromise = function(config, globalPlugins) {
+const webpackPromise = function (config, globalPlugins) {
   const compiler = webpack(config);
   compiler.outputFileSystem = new MemoryFileSystem();
   if (Array.isArray(globalPlugins)) {
@@ -32,14 +33,14 @@ async function executeAndGetLogs(fixture, globalPlugins) {
   }
 }
 
-it('integration : success', async () => {
+it('integration : success', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/success/webpack.config')
 
   expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/);
 });
 
-it('integration : module-errors', async () => {
+it('integration : module-errors', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/module-errors/webpack.config.js');
 
@@ -55,27 +56,35 @@ it('integration : module-errors', async () => {
   ]);
 });
 
-it('integration : should display eslint warnings', async () => {
+function filename(filePath) {
+  return path.join(__dirname, path.normalize(filePath))
+}
+
+it.only('integration : should display eslint warnings', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/eslint-warnings/webpack.config.js');
 
-  expect(logs).toEqual([
-    'WARNING  Compiled with 1 warnings',
-    '',
-    'warning  in ./test/fixtures/eslint-warnings/index.js',
-    '',
-    `${__dirname}/fixtures/eslint-warnings/index.js
+  expect(logs.join('\n')).toEqual(
+    `WARNING  Compiled with 2 warnings
+
+${filename('fixtures/eslint-warnings/index.js')}
+  3:7  warning  'unused' is assigned a value but never used   no-unused-vars
+  4:7  warning  'unused2' is assigned a value but never used  no-unused-vars
+
+✖ 2 problems (0 errors, 2 warnings)
+
+${filename('fixtures/eslint-warnings/module.js')}
   1:7  warning  'unused' is assigned a value but never used  no-unused-vars
 
-✖ 1 problem (0 errors, 1 warning)`,
-    '',
-    'You may use special comments to disable some warnings.',
-    'Use // eslint-disable-next-line to ignore the next line.',
-    'Use /* eslint-disable */ to ignore all warnings in a file.'
-  ]);
+✖ 1 problem (0 errors, 1 warning)
+
+You may use special comments to disable some warnings.
+Use // eslint-disable-next-line to ignore the next line.
+Use /* eslint-disable */ to ignore all warnings in a file.`
+  )
 });
 
-it('integration : babel syntax error', async () => {
+it('integration : babel syntax error', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/babel-syntax/webpack.config');
 
@@ -96,7 +105,7 @@ it('integration : babel syntax error', async () => {
   ]);
 });
 
-it('integration : webpack multi compiler : success', async () => {
+it('integration : webpack multi compiler : success', async() => {
 
   // We apply the plugin directly to the compiler when targeting multi-compiler
   let globalPlugins = [new FriendlyErrorsWebpackPlugin()];
@@ -105,7 +114,7 @@ it('integration : webpack multi compiler : success', async () => {
   expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/)
 });
 
-it('integration : webpack multi compiler : module-errors', async () => {
+it('integration : webpack multi compiler : module-errors', async() => {
 
   // We apply the plugin directly to the compiler when targeting multi-compiler
   let globalPlugins = [new FriendlyErrorsWebpackPlugin()];
