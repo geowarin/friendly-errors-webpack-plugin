@@ -10,11 +10,6 @@ class Debugger {
     this.enabled = true;
     this.capturing = false;
     this.capturedMessages = [];
-
-    const currentPosition = getCursorPosition.sync();
-    if(currentPosition && currentPosition.row) {
-      this.cursorPosition = currentPosition.row;
-    }
   }
 
   enable () {
