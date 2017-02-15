@@ -1,40 +1,43 @@
 const output = require('../src/output');
-const deasync = require('deasync');
 const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('../src/friendly-errors-plugin');
 const MemoryFileSystem = require('memory-fs');
 
-const syncWebpack = deasync(function(config, fn) {
+const webpackPromise = function(config, ...globalPlugins) {
   const compiler = webpack(config);
   compiler.outputFileSystem = new MemoryFileSystem();
-  compiler.run(fn);
-  return compiler;
-});
+  globalPlugins.forEach(p => compiler.apply(p));
 
-// Applys plugin directly to compiler to support `MultiCompiler` tests.
-const syncWebpackWithPlugin = deasync(function(config, fn) {
-  const compiler = webpack(config);
-  compiler.outputFileSystem = new MemoryFileSystem();
-  compiler.apply(new FriendlyErrorsWebpackPlugin());
-  compiler.run(fn);
-  return compiler;
-});
-
-it('integration : success', () => {
-
-  const logs = output.captureLogs(() => {
-    syncWebpack(require('./fixtures/success/webpack.config'));
+  return new Promise((resolve, reject) => {
+    compiler.run(err => {
+      if (err) {
+        reject(err)
+      }
+      resolve()
+    });
   });
+};
+
+async function executeAndGetLogs(fixture, ...globalPlugins) {
+  try {
+    output.capture();
+    await webpackPromise(require(fixture), ...globalPlugins);
+    return output.capturedMessages;
+  } finally {
+    output.endCapture()
+  }
+}
+
+it('integration : success', async () => {
+
+  const logs = await executeAndGetLogs('./fixtures/success/webpack.config')
 
   expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/);
 });
 
+it('integration : module-errors', async () => {
 
-it('integration : module-errors', () => {
-
-  const logs = output.captureLogs(() => {
-    syncWebpack(require('./fixtures/module-errors/webpack.config.js'));
-  });
+  const logs = await executeAndGetLogs('./fixtures/module-errors/webpack.config.js');
 
   expect(logs).toEqual([
     ' ERROR  Failed to compile with 2 errors',
@@ -48,11 +51,9 @@ it('integration : module-errors', () => {
   ]);
 });
 
-it('integration : should display eslint warnings', () => {
+it('integration : should display eslint warnings', async () => {
 
-  const logs = output.captureLogs(() => {
-    syncWebpack(require('./fixtures/eslint-warnings/webpack.config.js'));
-  });
+  const logs = await executeAndGetLogs('./fixtures/eslint-warnings/webpack.config.js');
 
   expect(logs).toEqual([
     ' WARNING  Compiled with 1 warnings',
@@ -71,11 +72,9 @@ it('integration : should display eslint warnings', () => {
   ]);
 });
 
-it('integration : babel syntax error', () => {
+it('integration : babel syntax error', async () => {
 
-  const logs = output.captureLogs(() => {
-    syncWebpack(require('./fixtures/babel-syntax/webpack.config'));
-  });
+  const logs = await executeAndGetLogs('./fixtures/babel-syntax/webpack.config');
 
   expect(logs).toEqual([
     ' ERROR  Failed to compile with 1 errors',
@@ -94,20 +93,18 @@ it('integration : babel syntax error', () => {
   ]);
 });
 
-it('integration : webpack multi compiler : success', () => {
+it('integration : webpack multi compiler : success', async () => {
 
-  const logs = output.captureLogs(() => {
-    syncWebpackWithPlugin(require('./fixtures/multi-compiler-success/webpack.config'));
-  });
+  // We apply the plugin directly to the compiler when targeting multi-compiler
+  const logs = await executeAndGetLogs('./fixtures/multi-compiler-success/webpack.config', new FriendlyErrorsWebpackPlugin());
 
   expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/)
 });
 
-it('integration : webpack multi compiler : module-errors', () => {
+it('integration : webpack multi compiler : module-errors', async () => {
 
-  const logs = output.captureLogs(() => {
-    syncWebpackWithPlugin(require('./fixtures/multi-compiler-module-errors/webpack.config'));
-  });
+  // We apply the plugin directly to the compiler when targeting multi-compiler
+  const logs = await executeAndGetLogs('./fixtures/multi-compiler-module-errors/webpack.config', new FriendlyErrorsWebpackPlugin());
 
   expect(logs).toEqual([
     ' ERROR  Failed to compile with 2 errors',
