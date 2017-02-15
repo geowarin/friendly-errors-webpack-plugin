@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/friendly-errors-webpack-plugin.svg)](https://www.npmjs.com/package/friendly-errors-webpack-plugin)
 [![Build Status](https://travis-ci.org/geowarin/friendly-errors-webpack-plugin.svg?branch=master)](https://travis-ci.org/geowarin/friendly-errors-webpack-plugin)
+[![Build status](https://ci.appveyor.com/api/projects/status/w6fovc9lttaqgx3k/branch/master?svg=true)](https://ci.appveyor.com/project/geowarin/friendly-errors-webpack-plugin/branch/master)
 
 Friendly-errors-webpack-plugin recognizes certain classes of webpack
 errors and cleans, aggregates and prioritizes them to provide a better

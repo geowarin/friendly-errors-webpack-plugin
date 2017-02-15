@@ -1,43 +1,51 @@
+"use strict";
+
 const output = require('../src/output');
-const deasync = require('deasync');
 const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('../src/friendly-errors-plugin');
 const MemoryFileSystem = require('memory-fs');
+const path = require('path');
 
-const syncWebpack = deasync(function(config, fn) {
+const webpackPromise = function (config, globalPlugins) {
   const compiler = webpack(config);
   compiler.outputFileSystem = new MemoryFileSystem();
-  compiler.run(fn);
-  return compiler;
-});
+  if (Array.isArray(globalPlugins)) {
+    globalPlugins.forEach(p => compiler.apply(p));
+  }
 
-// Applys plugin directly to compiler to support `MultiCompiler` tests.
-const syncWebpackWithPlugin = deasync(function(config, fn) {
-  const compiler = webpack(config);
-  compiler.outputFileSystem = new MemoryFileSystem();
-  compiler.apply(new FriendlyErrorsWebpackPlugin());
-  compiler.run(fn);
-  return compiler;
-});
-
-it('integration : success', () => {
-
-  const logs = output.captureLogs(() => {
-    syncWebpack(require('./fixtures/success/webpack.config'));
+  return new Promise((resolve, reject) => {
+    compiler.run(err => {
+      if (err) {
+        reject(err)
+      }
+      resolve()
+    });
   });
+};
+
+async function executeAndGetLogs(fixture, globalPlugins) {
+  try {
+    output.capture();
+    await webpackPromise(require(fixture), globalPlugins);
+    return output.capturedMessages;
+  } finally {
+    output.endCapture()
+  }
+}
+
+it('integration : success', async() => {
+
+  const logs = await executeAndGetLogs('./fixtures/success/webpack.config')
 
   expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/);
 });
 
+it('integration : module-errors', async() => {
 
-it('integration : module-errors', () => {
-
-  const logs = output.captureLogs(() => {
-    syncWebpack(require('./fixtures/module-errors/webpack.config.js'));
-  });
+  const logs = await executeAndGetLogs('./fixtures/module-errors/webpack.config.js');
 
   expect(logs).toEqual([
-    ' ERROR  Failed to compile with 2 errors',
+    'ERROR  Failed to compile with 2 errors',
     '',
     'These dependencies were not found in node_modules:',
     '',
@@ -48,41 +56,44 @@ it('integration : module-errors', () => {
   ]);
 });
 
-it('integration : should display eslint warnings', () => {
+function filename(filePath) {
+  return path.join(__dirname, path.normalize(filePath))
+}
 
-  const logs = output.captureLogs(() => {
-    syncWebpack(require('./fixtures/eslint-warnings/webpack.config.js'));
-  });
+it('integration : should display eslint warnings', async() => {
 
-  expect(logs).toEqual([
-    ' WARNING  Compiled with 1 warnings',
-    '',
-    ' warning  in ./test/fixtures/eslint-warnings/index.js',
-    '',
-    `${__dirname}/fixtures/eslint-warnings/index.js
+  const logs = await executeAndGetLogs('./fixtures/eslint-warnings/webpack.config.js');
+
+  expect(logs.join('\n')).toEqual(
+    `WARNING  Compiled with 2 warnings
+
+${filename('fixtures/eslint-warnings/index.js')}
+  3:7  warning  'unused' is assigned a value but never used   no-unused-vars
+  4:7  warning  'unused2' is assigned a value but never used  no-unused-vars
+
+✖ 2 problems (0 errors, 2 warnings)
+
+${filename('fixtures/eslint-warnings/module.js')}
   1:7  warning  'unused' is assigned a value but never used  no-unused-vars
 
 ✖ 1 problem (0 errors, 1 warning)
-`,
-    '',
-    'You may use special comments to disable some warnings.',
-    'Use // eslint-disable-next-line to ignore the next line.',
-    'Use /* eslint-disable */ to ignore all warnings in a file.'
-  ]);
+
+You may use special comments to disable some warnings.
+Use // eslint-disable-next-line to ignore the next line.
+Use /* eslint-disable */ to ignore all warnings in a file.`
+  )
 });
 
-it('integration : babel syntax error', () => {
+it('integration : babel syntax error', async() => {
 
-  const logs = output.captureLogs(() => {
-    syncWebpack(require('./fixtures/babel-syntax/webpack.config'));
-  });
+  const logs = await executeAndGetLogs('./fixtures/babel-syntax/webpack.config');
 
   expect(logs).toEqual([
-    ' ERROR  Failed to compile with 1 errors',
+    'ERROR  Failed to compile with 1 errors',
     '',
-    ' error  in ./test/fixtures/babel-syntax/index.js',
+    'error  in ./test/fixtures/babel-syntax/index.js',
     '',
-    `SyntaxError: Unexpected token (5:11)
+    `Syntax Error: Unexpected token (5:11)
 
   3 |${' '}
   4 |   render() {
@@ -94,23 +105,23 @@ it('integration : babel syntax error', () => {
   ]);
 });
 
-it('integration : webpack multi compiler : success', () => {
+it('integration : webpack multi compiler : success', async() => {
 
-  const logs = output.captureLogs(() => {
-    syncWebpackWithPlugin(require('./fixtures/multi-compiler-success/webpack.config'));
-  });
+  // We apply the plugin directly to the compiler when targeting multi-compiler
+  let globalPlugins = [new FriendlyErrorsWebpackPlugin()];
+  const logs = await executeAndGetLogs('./fixtures/multi-compiler-success/webpack.config', globalPlugins);
 
   expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/)
 });
 
-it('integration : webpack multi compiler : module-errors', () => {
+it('integration : webpack multi compiler : module-errors', async() => {
 
-  const logs = output.captureLogs(() => {
-    syncWebpackWithPlugin(require('./fixtures/multi-compiler-module-errors/webpack.config'));
-  });
+  // We apply the plugin directly to the compiler when targeting multi-compiler
+  let globalPlugins = [new FriendlyErrorsWebpackPlugin()];
+  const logs = await executeAndGetLogs('./fixtures/multi-compiler-module-errors/webpack.config', globalPlugins);
 
   expect(logs).toEqual([
-    ' ERROR  Failed to compile with 2 errors',
+    'ERROR  Failed to compile with 2 errors',
     '',
     'These dependencies were not found in node_modules:',
     '',

@@ -19,6 +19,7 @@ const defaultTransformers = [
 
 const defaultFormatters = [
   require('./formatters/moduleNotFound'),
+  require('./formatters/eslintError'),
   require('./formatters/defaultError'),
 ];
 
