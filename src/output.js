@@ -63,7 +63,7 @@ class Debugger {
   }
 
   clearConsole () {
-    if (!this.capturing && this.enabled) {
+    if (!this.capturing && this.enabled && process.stdout.isTTY) {
       // Account for the fact that someone might clear (cmd + k for example) his terminal window
       const currentPosition = getCursorPosition.sync()
       if(currentPosition && currentPosition.row) {
