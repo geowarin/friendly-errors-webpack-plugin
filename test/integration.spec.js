@@ -84,7 +84,7 @@ it('integration : babel syntax error', async () => {
     '',
     'error  in ./test/fixtures/babel-syntax/index.js',
     '',
-    `SyntaxError: Unexpected token (5:11)
+    `Syntax Error: Unexpected token (5:11)
 
   3 |${' '}
   4 |   render() {
