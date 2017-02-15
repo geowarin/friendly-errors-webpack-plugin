@@ -60,7 +60,7 @@ function filename(filePath) {
   return path.join(__dirname, path.normalize(filePath))
 }
 
-it.only('integration : should display eslint warnings', async() => {
+it('integration : should display eslint warnings', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/eslint-warnings/webpack.config.js');
 
