@@ -2,7 +2,7 @@
 
 const colors = require('./utils/colors');
 const chalk = require('chalk');
-const getCursorPosition = require('get-cursor-position');
+const getCursorPosition = require('@patrickkettner/get-cursor-position');
 const readline = require('readline')
 
 class Debugger {
@@ -71,7 +71,7 @@ class Debugger {
           this.cursorPosition = currentPosition.row
         }
       }
-      readline.cursorTo(process.stdout,0, this.cursorPosition)
+      readline.cursorTo(process.stdout, 0, this.cursorPosition)
       readline.clearScreenDown(process.stdout)
     }
   }
