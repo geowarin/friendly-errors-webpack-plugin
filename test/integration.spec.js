@@ -44,7 +44,7 @@ it('integration : module-errors', async () => {
   const logs = await executeAndGetLogs('./fixtures/module-errors/webpack.config.js');
 
   expect(logs).toEqual([
-    ' ERROR  Failed to compile with 2 errors',
+    'ERROR  Failed to compile with 2 errors',
     '',
     'These dependencies were not found in node_modules:',
     '',
@@ -60,15 +60,14 @@ it('integration : should display eslint warnings', async () => {
   const logs = await executeAndGetLogs('./fixtures/eslint-warnings/webpack.config.js');
 
   expect(logs).toEqual([
-    ' WARNING  Compiled with 1 warnings',
+    'WARNING  Compiled with 1 warnings',
     '',
-    ' warning  in ./test/fixtures/eslint-warnings/index.js',
+    'warning  in ./test/fixtures/eslint-warnings/index.js',
     '',
     `${__dirname}/fixtures/eslint-warnings/index.js
   1:7  warning  'unused' is assigned a value but never used  no-unused-vars
 
-✖ 1 problem (0 errors, 1 warning)
-`,
+✖ 1 problem (0 errors, 1 warning)`,
     '',
     'You may use special comments to disable some warnings.',
     'Use // eslint-disable-next-line to ignore the next line.',
@@ -81,11 +80,11 @@ it('integration : babel syntax error', async () => {
   const logs = await executeAndGetLogs('./fixtures/babel-syntax/webpack.config');
 
   expect(logs).toEqual([
-    ' ERROR  Failed to compile with 1 errors',
+    'ERROR  Failed to compile with 1 errors',
     '',
-    ' error  in ./test/fixtures/babel-syntax/index.js',
+    'error  in ./test/fixtures/babel-syntax/index.js',
     '',
-    `SyntaxError: Unexpected token (5:11)
+    `Syntax Error: Unexpected token (5:11)
 
   3 |${' '}
   4 |   render() {
@@ -113,7 +112,7 @@ it('integration : webpack multi compiler : module-errors', async () => {
   const logs = await executeAndGetLogs('./fixtures/multi-compiler-module-errors/webpack.config', globalPlugins);
 
   expect(logs).toEqual([
-    ' ERROR  Failed to compile with 2 errors',
+    'ERROR  Failed to compile with 2 errors',
     '',
     'These dependencies were not found in node_modules:',
     '',

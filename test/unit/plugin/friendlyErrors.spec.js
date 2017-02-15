@@ -18,7 +18,7 @@ it('friendlyErrors : capture invalid message', () => {
   });
 
   expect(logs).toEqual([
-    ' WAIT  Compiling...',
+    'WAIT  Compiling...',
     ''
     ]);
 });
@@ -31,7 +31,7 @@ it('friendlyErrors : capture compilation without errors', () => {
   });
 
   expect(logs).toEqual([
-    ' DONE  Compiled successfully in 100ms',
+    'DONE  Compiled successfully in 100ms',
     ''
   ]);
 });

@@ -75,7 +75,7 @@ class Debugger {
 
   captureConsole (args, method) {
     if (this.capturing) {
-      this.capturedMessages.push(chalk.stripColor(args.join(' ').trim()));
+      this.capturedMessages.push(chalk.stripColor(args.join(' ')).trim());
     } else {
       method.apply(console, args);
     }
