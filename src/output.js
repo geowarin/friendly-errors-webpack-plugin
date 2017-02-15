@@ -2,7 +2,6 @@
 
 const colors = require('./utils/colors');
 const chalk = require('chalk');
-const getCursorPosition = require('@patrickkettner/get-cursor-position');
 const readline = require('readline')
 
 class Debugger {
@@ -64,14 +63,10 @@ class Debugger {
 
   clearConsole () {
     if (!this.capturing && this.enabled && process.stdout.isTTY) {
-      // Account for the fact that someone might clear (cmd + k for example) his terminal window
-      const currentPosition = getCursorPosition.sync()
-      if(currentPosition && currentPosition.row) {
-        if(this.cursorPosition > currentPosition.row) {
-          this.cursorPosition = currentPosition.row
-        }
-      }
-      readline.cursorTo(process.stdout, 0, this.cursorPosition)
+      // Fill screen with blank lines. Then move to 0 (beginning of visible part) and clear it
+      const blank = '\n'.repeat(process.stdout.rows)
+      console.log(blank)
+      readline.cursorTo(process.stdout, 0, 0)
       readline.clearScreenDown(process.stdout)
     }
   }
