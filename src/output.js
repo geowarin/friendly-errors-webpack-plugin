@@ -3,6 +3,7 @@
 const colors = require('./utils/colors');
 const chalk = require('chalk');
 const stringLength = require('string-length');
+const readline = require('readline');
 
 class Debugger {
 
