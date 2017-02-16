@@ -2,7 +2,7 @@
 
 const colors = require('./utils/colors');
 const chalk = require('chalk');
-const readline = require('readline')
+const stringLength = require('string-length');
 
 class Debugger {
 
@@ -49,9 +49,26 @@ class Debugger {
 
   title (severity, title, subtitle) {
     if (this.enabled) {
+      const date = new Date();
+      const dateString = chalk.grey(date.toLocaleTimeString());
       const titleFormatted = colors.formatTitle(severity, title);
       const subTitleFormatted = colors.formatText(severity, subtitle);
-      this.log(titleFormatted, subTitleFormatted);
+      const message = `${titleFormatted} ${subTitleFormatted}`
+
+      // In test environment we don't include timestamp
+      if(process.env.NODE_ENV === 'test') {
+        this.log(message);
+        this.log();
+        return;
+      }
+
+      // Make timestamp appear at the end of the line
+      let logSpace = process.stdout.columns - stringLength(message) - stringLength(dateString)
+      if (logSpace <= 0) {
+        logSpace = 10
+      }
+
+      this.log(`${message}${' '.repeat(logSpace)}${dateString}`);
       this.log();
     }
   }
