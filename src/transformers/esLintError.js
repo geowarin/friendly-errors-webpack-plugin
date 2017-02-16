@@ -1,10 +1,8 @@
 'use strict';
 
-const chalk = require('chalk');
-
 function isEslintError (e) {
   return e.originalStack
-    .some(stackframe => stackframe.fileName.indexOf('eslint-loader') > 0);
+    .some(stackframe => stackframe.fileName && stackframe.fileName.indexOf('eslint-loader') > 0);
 }
 
 function transform(error) {
