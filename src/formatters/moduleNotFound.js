@@ -25,7 +25,7 @@ function formatErrors (errors) {
   return concat(
     dependenciesNotFound(errors.length),
     '',
-    errors.map(e =>`* ${e.module}`),
+    errors.map(e =>`* ${e.module}${e.file ? ` in ${e.file}` : ''}`),
     '',
     forgetToInstall(errors.length)
   );

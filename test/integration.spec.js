@@ -49,8 +49,8 @@ it('integration : module-errors', async() => {
     '',
     'These dependencies were not found in node_modules:',
     '',
-    '* ./non-existing',
-    '* not-found',
+    '* ./non-existing in ./test/fixtures/module-errors/index.js',
+    '* not-found in ./test/fixtures/module-errors/index.js',
     '',
     'Did you forget to run npm install --save for them?'
   ]);
@@ -125,8 +125,8 @@ it('integration : webpack multi compiler : module-errors', async() => {
     '',
     'These dependencies were not found in node_modules:',
     '',
-    '* ./non-existing',
-    '* not-found',
+    '* ./non-existing in ./test/fixtures/multi-compiler-module-errors/index.js',
+    '* not-found in ./test/fixtures/multi-compiler-module-errors/index2.js',
     '',
     'Did you forget to run npm install --save for them?'
   ]);
