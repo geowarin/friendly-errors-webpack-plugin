@@ -47,12 +47,12 @@ it('integration : module-errors', async() => {
   expect(logs).toEqual([
     'ERROR  Failed to compile with 2 errors',
     '',
-    'These dependencies were not found in node_modules:',
+    'These modules were not found:',
     '',
     '* ./non-existing in ./test/fixtures/module-errors/index.js',
     '* not-found in ./test/fixtures/module-errors/index.js',
     '',
-    'Did you forget to run npm install --save for them?'
+    'To install it, you can run: npm install --save not-found'
   ]);
 });
 
@@ -123,11 +123,11 @@ it('integration : webpack multi compiler : module-errors', async() => {
   expect(logs).toEqual([
     'ERROR  Failed to compile with 2 errors',
     '',
-    'These dependencies were not found in node_modules:',
+    'These modules were not found:',
     '',
     '* ./non-existing in ./test/fixtures/multi-compiler-module-errors/index.js',
     '* not-found in ./test/fixtures/multi-compiler-module-errors/index2.js',
     '',
-    'Did you forget to run npm install --save for them?'
+    'To install it, you can run: npm install --save not-found'
   ]);
 });
