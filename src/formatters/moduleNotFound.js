@@ -1,13 +1,21 @@
 'use strict';
 const concat = require('../utils').concat;
 
-function moduleNotFound (count) {
-  if (count === 1) {
-    return 'This module was not found:';
-  }
-
-  return 'These modules were not found:';
+function isRelative (module) {
+  return module.startsWith('./') || module.startsWith('../');
 }
+
+function formatFileList (files) {
+  const length = files.length;
+  if (!length) return '';
+  return ` in ${files[0]}${files[1] ? `, ${files[1]}` : ''}${length > 2 ? ` and ${length - 2} other${length === 3 ? '' : 's'}` : ''}`;
+}
+
+function formatGroup (group) {
+  const files = group.errors.map(e => e.file).filter(Boolean);
+  return `* ${group.module}${formatFileList(files)}`;
+}
+
 
 function forgetToInstall (missingDependencies) {
   const moduleNames = missingDependencies.map(missingDependency => missingDependency.module);
@@ -19,8 +27,26 @@ function forgetToInstall (missingDependencies) {
   return `To install them, you can run: npm install --save ${moduleNames.join(' ')}`;
 }
 
-function isRelative (module) {
-  return module.startsWith('./');
+function dependenciesNotFound (dependencies) {
+  if (dependencies.length === 0) return;
+
+  return concat(
+    dependencies.length === 1 ? 'This dependency was not found:' : 'These dependencies were not found:',
+    '',
+    dependencies.map(formatGroup),
+    '',
+    forgetToInstall(dependencies),
+  );
+}
+
+function relativeModulesNotFound (modules) {
+  if (modules.length === 0) return;
+
+  return concat(
+    modules.length === 1 ? 'This relative module was not found:' : 'These relative modules were not found:',
+    '',
+    modules.map(formatGroup),
+  );
 }
 
 function groupModules (errors) {
@@ -40,33 +66,20 @@ function groupModules (errors) {
   }));
 }
 
-function formatFileList (files) {
-  const length = files.length;
-  if (!length) return '';
-  return ` in ${files[0]}${files[1] ? `, ${files[1]}` : ''}${length > 2 ? ` and ${length - 2} other${length === 3 ? '' : 's'}` : ''}`;
-}
-
-function formatGroup (group) {
-  const files = group.errors.map(e => e.file).filter(Boolean);
-  return `* ${group.module}${formatFileList(files)}`;
-}
-
 function formatErrors (errors) {
   if (errors.length === 0) {
     return [];
   }
 
   const groups = groupModules(errors);
-  const missingDependencies = groups.filter(group => !group.relative);
+
+  const dependencies = groups.filter(group => !group.relative);
+  const relativeModules = groups.filter(group => group.relative);
 
   return concat(
-    moduleNotFound(errors.length),
-    '',
-    groups.map(formatGroup),
-    missingDependencies.length === 0 ? undefined : [
-      '',
-      forgetToInstall(missingDependencies)
-    ]
+    dependenciesNotFound(dependencies),
+    dependencies.length && relativeModules.length ? ['', ''] : null,
+    relativeModulesNotFound(relativeModules),
   );
 }
 

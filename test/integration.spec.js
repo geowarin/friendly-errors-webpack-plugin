@@ -45,14 +45,19 @@ it('integration : module-errors', async() => {
   const logs = await executeAndGetLogs('./fixtures/module-errors/webpack.config.js');
 
   expect(logs).toEqual([
-    'ERROR  Failed to compile with 2 errors',
+    'ERROR  Failed to compile with 3 errors',
     '',
-    'These modules were not found:',
+    'This dependency was not found:',
     '',
-    '* ./non-existing in ./test/fixtures/module-errors/index.js',
     '* not-found in ./test/fixtures/module-errors/index.js',
     '',
-    'To install it, you can run: npm install --save not-found'
+    'To install it, you can run: npm install --save not-found',
+    '',
+    '',
+    'These relative modules were not found:',
+    '',
+    '* ./non-existing in ./test/fixtures/module-errors/index.js',
+    '* ../non-existing in ./test/fixtures/module-errors/index.js',
   ]);
 });
 
@@ -123,11 +128,15 @@ it('integration : webpack multi compiler : module-errors', async() => {
   expect(logs).toEqual([
     'ERROR  Failed to compile with 2 errors',
     '',
-    'These modules were not found:',
+    'This dependency was not found:',
     '',
-    '* ./non-existing in ./test/fixtures/multi-compiler-module-errors/index.js',
     '* not-found in ./test/fixtures/multi-compiler-module-errors/index2.js',
     '',
-    'To install it, you can run: npm install --save not-found'
+    'To install it, you can run: npm install --save not-found',
+    '',
+    '',
+    'This relative module was not found:',
+    '',
+    '* ./non-existing in ./test/fixtures/multi-compiler-module-errors/index.js',
   ]);
 });
