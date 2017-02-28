@@ -4,7 +4,7 @@ const expect = require('expect');
 it('Formats module-not-found errors', () => {
   const error = { type: 'module-not-found', module: 'redux' };
   expect(moduleNotFound([error])).toEqual([
-    'This module was not found:',
+    'This dependency was not found:',
     '',
     '* redux',
     '',
@@ -16,7 +16,7 @@ it('Groups all module-not-found into one', () => {
   const reduxError = { type: 'module-not-found', module: 'redux' };
   const reactError = { type: 'module-not-found', module: 'react' };
   expect(moduleNotFound([reduxError, reactError])).toEqual([
-    'These modules were not found:',
+    'These dependencies were not found:',
     '',
     '* redux',
     '* react',
@@ -30,7 +30,7 @@ it('Groups same module in module-not-found with 2 files', () => {
   const reactError1 = { type: 'module-not-found', module: 'react', file: './src/file1.js' };
   const reactError2 = { type: 'module-not-found', module: 'react', file: '../src/file2.js' };
   expect(moduleNotFound([reduxError, reactError1, reactError2])).toEqual([
-    'These modules were not found:',
+    'These dependencies were not found:',
     '',
     '* redux',
     '* react in ./src/file1.js, ../src/file2.js',
@@ -45,7 +45,7 @@ it('Groups same module in module-not-found with 3 files', () => {
   const reactError2 = { type: 'module-not-found', module: 'react', file: './src/file2.js' };
   const reactError3 = { type: 'module-not-found', module: 'react', file: './src/file3.js' };
   expect(moduleNotFound([reduxError, reactError1, reactError2, reactError3])).toEqual([
-    'These modules were not found:',
+    'These dependencies were not found:',
     '',
     '* redux',
     '* react in ./src/file1.js, ./src/file2.js and 1 other',
@@ -61,7 +61,7 @@ it('Groups same module in module-not-found with 4 files', () => {
   const reactError3 = { type: 'module-not-found', module: 'react', file: './src/file3.js' };
   const reactError4 = { type: 'module-not-found', module: 'react', file: './src/file4.js' };
   expect(moduleNotFound([reduxError, reactError1, reactError2, reactError3, reactError4])).toEqual([
-    'These modules were not found:',
+    'These dependencies were not found:',
     '',
     '* redux',
     '* react in ./src/file1.js, ./src/file2.js and 2 others',
