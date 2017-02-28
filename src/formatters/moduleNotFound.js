@@ -20,7 +20,7 @@ function forgetToInstall (missingDependencies) {
 }
 
 function isRelative (module) {
-  return module.startsWith('./');
+  return module.startsWith('./') || module.startsWith('../');
 }
 
 function groupModules (errors) {

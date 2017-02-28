@@ -45,11 +45,12 @@ it('integration : module-errors', async() => {
   const logs = await executeAndGetLogs('./fixtures/module-errors/webpack.config.js');
 
   expect(logs).toEqual([
-    'ERROR  Failed to compile with 2 errors',
+    'ERROR  Failed to compile with 3 errors',
     '',
     'These modules were not found:',
     '',
     '* ./non-existing in ./test/fixtures/module-errors/index.js',
+    '* ../non-existing in ./test/fixtures/module-errors/index.js',
     '* not-found in ./test/fixtures/module-errors/index.js',
     '',
     'To install it, you can run: npm install --save not-found'

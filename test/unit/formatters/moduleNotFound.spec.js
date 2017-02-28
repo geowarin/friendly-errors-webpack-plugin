@@ -28,12 +28,12 @@ it('Groups all module-not-found into one', () => {
 it('Groups same module in module-not-found with 2 files', () => {
   const reduxError = { type: 'module-not-found', module: 'redux' };
   const reactError1 = { type: 'module-not-found', module: 'react', file: './src/file1.js' };
-  const reactError2 = { type: 'module-not-found', module: 'react', file: './src/file2.js' };
+  const reactError2 = { type: 'module-not-found', module: 'react', file: '../src/file2.js' };
   expect(moduleNotFound([reduxError, reactError1, reactError2])).toEqual([
     'These modules were not found:',
     '',
     '* redux',
-    '* react in ./src/file1.js, ./src/file2.js',
+    '* react in ./src/file1.js, ../src/file2.js',
     '',
     'To install them, you can run: npm install --save redux react'
   ]);
