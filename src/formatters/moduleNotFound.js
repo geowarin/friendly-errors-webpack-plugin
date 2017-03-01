@@ -35,7 +35,7 @@ function dependenciesNotFound (dependencies) {
     '',
     dependencies.map(formatGroup),
     '',
-    forgetToInstall(dependencies),
+    forgetToInstall(dependencies)
   );
 }
 
@@ -45,7 +45,7 @@ function relativeModulesNotFound (modules) {
   return concat(
     modules.length === 1 ? 'This relative module was not found:' : 'These relative modules were not found:',
     '',
-    modules.map(formatGroup),
+    modules.map(formatGroup)
   );
 }
 
@@ -62,7 +62,7 @@ function groupModules (errors) {
   return Array.from(missingModule.keys()).map(module => ({
     module: module,
     relative: isRelative(module),
-    errors: missingModule.get(module),
+    errors: missingModule.get(module)
   }));
 }
 
@@ -79,7 +79,7 @@ function formatErrors (errors) {
   return concat(
     dependenciesNotFound(dependencies),
     dependencies.length && relativeModules.length ? ['', ''] : null,
-    relativeModulesNotFound(relativeModules),
+    relativeModulesNotFound(relativeModules)
   );
 }
 
