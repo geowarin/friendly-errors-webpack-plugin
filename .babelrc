@@ -1,3 +1,4 @@
 {
+  "only": "test/",
   "plugins": ["transform-async-to-generator"]
 }
