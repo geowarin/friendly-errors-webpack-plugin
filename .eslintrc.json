@@ -1,0 +1,6 @@
+{
+	"parserOptions": {
+		"ecmaVersion": 6
+	},
+  "comma-dangle": ["error", "never"]
+}
