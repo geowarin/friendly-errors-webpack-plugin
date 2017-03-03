@@ -4,7 +4,7 @@
   "description": "Recognizes certain classes of webpack errors and cleans, aggregates and prioritizes them to provide a better Developer Experience",
   "main": "index.js",
   "scripts": {
-    "test": "eslint --ignore-pattern test/* & jest" 
+    "test": "eslint --ignore-pattern test/* && jest" 
   },
   "files": [
     "src",
