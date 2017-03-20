@@ -2,7 +2,7 @@
 
 const colors = require('./utils/colors');
 const chalk = require('chalk');
-const stringLength = require('string-length');
+const stringWidth = require('string-width');
 const readline = require('readline');
 
 class Debugger {
@@ -64,7 +64,7 @@ class Debugger {
       }
 
       // Make timestamp appear at the end of the line
-      let logSpace = process.stdout.columns - stringLength(message) - stringLength(dateString)
+      let logSpace = process.stdout.columns - stringWidth(message) - stringWidth(dateString)
       if (logSpace <= 0) {
         logSpace = 10
       }
