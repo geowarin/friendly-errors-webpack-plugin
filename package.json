@@ -24,7 +24,6 @@
   "bugs": {
     "url": "https://github.com/geowarin/friendly-errors-webpack-plugin/issues"
   },
-  "homepage": "http://geowarin.github.io/friendly-errors-webpack-plugin",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.23.1",
