@@ -62,7 +62,7 @@ function groupModules (errors) {
   return Array.from(missingModule.keys()).map(module => ({
     module: module,
     relative: isRelative(module),
-    errors: missingModule.get(module),
+    errors: missingModule.get(module)
   }));
 }
 
