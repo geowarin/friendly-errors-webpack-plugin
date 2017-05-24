@@ -130,7 +130,7 @@ new NotifierPlugin({
       }
       const error = errors[0];
       notifier.notify({
-        title: context.pkg.name,
+        title: "Webpack error",
         message: severity + ': ' + error.name,
         subtitle: error.file || '',
         icon: ICON
@@ -159,4 +159,4 @@ and the [default formatters](https://github.com/geowarin/friendly-errors-webpack
 ## TODO
 
 - [x] Make it compatible with node 4
-- [ ] Write tests using webpack 1
+
