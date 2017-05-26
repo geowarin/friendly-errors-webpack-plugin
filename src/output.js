@@ -51,7 +51,7 @@ class Debugger {
   title (severity, title, subtitle) {
     if (this.enabled) {
       const date = new Date();
-      const dateString = chalk.grey(date.toLocaleTimeString());
+      const dateString = chalk.blue(date.toLocaleTimeString());
       const titleFormatted = colors.formatTitle(severity, title);
       const subTitleFormatted = colors.formatText(severity, subtitle);
       const message = `${titleFormatted} ${subTitleFormatted}`
