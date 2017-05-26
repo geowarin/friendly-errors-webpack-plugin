@@ -23,6 +23,21 @@ const defaultFormatters = [
   require('./formatters/defaultError'),
 ];
 
+const defaultOutputOptions = {
+  dateString: {
+    color: 'blue',
+  },
+  took: {
+    // can be "ms" or "s"
+    on: 'ms',
+    // greater than 5000 ms, it will be displayed on red
+    // (!) if took.on === 's' then took.red must be on seconds too
+    red: 5000,
+  },
+  displayLastCompile: true,
+  displayTook: true,
+};
+
 class FriendlyErrorsWebpackPlugin {
 
   constructor(options) {
@@ -32,10 +47,10 @@ class FriendlyErrorsWebpackPlugin {
     this.shouldClearConsole = options.clearConsole == null ? true : Boolean(options.clearConsole);
     this.formatters = concat(defaultFormatters, options.additionalFormatters);
     this.transformers = concat(defaultTransformers, options.additionalTransformers);
+    this.output = Object.assign({}, defaultOutputOptions, options.output);
   }
 
   apply(compiler) {
-
     compiler.plugin('done', stats => {
       this.clearConsole();
 
@@ -55,6 +70,19 @@ class FriendlyErrorsWebpackPlugin {
       if (hasWarnings) {
         this.displayErrors(extractErrorsFromStats(stats, 'warnings'), 'warning');
       }
+
+      output.log();
+
+      if(this.output.displayLastCompile) {
+        this.displayLastCompile(this.output.dateString.color);
+      }
+
+      if(this.output.displayTook){
+        this.displayTook(stats, this.output.took);
+      }
+
+      output.log();
+
     });
 
     compiler.plugin('invalid', () => {
@@ -99,6 +127,26 @@ class FriendlyErrorsWebpackPlugin {
 
     formatErrors(topErrors, this.formatters, severity)
       .forEach(chunk => output.log(chunk));
+  }
+
+  displayLastCompile(dateStringColor) {
+    const date = new Date();
+    const lastCompile = chalk[dateStringColor](date.toLocaleDateString()) + " at " + chalk[dateStringColor](date.toLocaleTimeString());
+
+    output.log("Last compile: " + lastCompile);
+  }
+
+  displayTook(stats, tookOptions) {
+    const time = getCompileTime(stats);
+
+    if (tookOptions.on === 's') {
+      time = time / 1000;
+      tookOptions.red = tookOptions.red / 1000;
+    }
+
+    const took = (time < tookOptions.red) ? chalk.green(time + tookOptions.on) : chalk.red(time + tookOptions.on);
+
+    output.log("Took: " + took);
   }
 }
 
