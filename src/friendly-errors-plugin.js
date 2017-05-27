@@ -137,7 +137,7 @@ class FriendlyErrorsWebpackPlugin {
   }
 
   displayTook(stats, tookOptions) {
-    const time = getCompileTime(stats);
+    let time = getCompileTime(stats);
 
     if (tookOptions.on === 's') {
       time = time / 1000;
