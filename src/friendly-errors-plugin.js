@@ -141,7 +141,6 @@ class FriendlyErrorsWebpackPlugin {
 
     if (tookOptions.on === 's') {
       time = time / 1000;
-      tookOptions.red = tookOptions.red / 1000;
     }
 
     const took = (time < tookOptions.red) ? chalk.green(time + tookOptions.on) : chalk.red(time + tookOptions.on);
