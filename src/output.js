@@ -4,6 +4,7 @@ const colors = require('./utils/colors');
 const chalk = require('chalk');
 const stringWidth = require('string-width');
 const readline = require('readline');
+const osLocale = require('os-locale');
 
 class Debugger {
 
@@ -50,8 +51,12 @@ class Debugger {
 
   title (severity, title, subtitle) {
     if (this.enabled) {
+      // Convert "ICU Locale ID" to "BCP 47 language tag"
+      // http://unicode.org/reports/tr35/#BCP_47_Language_Tag_Conversion
+      const locale = osLocale.sync().replace(/_/g, '-').replace(/^root/, 'und');
+
       const date = new Date();
-      const dateString = chalk.grey(date.toLocaleTimeString());
+      const dateString = chalk.grey(date.toLocaleTimeString(locale));
       const titleFormatted = colors.formatTitle(severity, title);
       const subTitleFormatted = colors.formatText(severity, subtitle);
       const message = `${titleFormatted} ${subTitleFormatted}`
