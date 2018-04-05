@@ -3,7 +3,7 @@
 const TYPE = 'module-not-found';
 
 function isModuleNotFoundError (e) {
-  const webpackError = e.webpackError || {};
+  const webpackError = e.webpackError || {};
   return webpackError.dependencies
     && webpackError.dependencies.length > 0
     && e.name === 'ModuleNotFoundError'

@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "webpack": "^2.0.0 || ^3.0.0"
+    "webpack": "^2.0.0 || ^3.0.0 || ^4.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",

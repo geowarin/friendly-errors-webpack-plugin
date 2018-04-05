@@ -10,7 +10,7 @@ const webpackPromise = function (config, globalPlugins) {
   const compiler = webpack(config);
   compiler.outputFileSystem = new MemoryFileSystem();
   if (Array.isArray(globalPlugins)) {
-    globalPlugins.forEach(p => compiler.apply(p));
+    globalPlugins.forEach(p => p.apply(compiler));
   }
 
   return new Promise((resolve, reject) => {
