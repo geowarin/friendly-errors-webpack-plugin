@@ -67,6 +67,10 @@ class FriendlyErrorsWebpackPlugin {
 
       compiler.hooks.done.tap(plugin, doneFn);
       compiler.hooks.invalid.tap(plugin, invalidFn);
+      // when 'bail':true in webpack config, the compiler will tap 'failed' hook
+      compiler.hooks.failed && compiler.hooks.failed.tap(plugin, error => {
+        this.displayErrors([error], 'error');
+      })
     } else {
       compiler.plugin('done', doneFn);
       compiler.plugin('invalid', invalidFn);
