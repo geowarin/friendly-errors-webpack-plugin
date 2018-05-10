@@ -15,8 +15,8 @@ function bgColor(severity) {
   return 'bg'+ capitalizeFirstLetter(color)
 }
 
-function textColor(serverity) {
-  switch (serverity.toLowerCase()) {
+function textColor(severity) {
+  switch (severity.toLowerCase()) {
     case 'success': return 'green';
     case 'info': return 'blue';
     case 'note': return 'white';
