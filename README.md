@@ -41,8 +41,9 @@ You need to turn off all error logging by setting your webpack config quiet opti
 
 ```javascript
 app.use(require('webpack-dev-middleware')(compiler, {
-  quiet: true,
-  publicPath: config.output.publicPath,
+  // ...
+  logLevel: 'silent',
+  // ...
 }));
 ```
 
