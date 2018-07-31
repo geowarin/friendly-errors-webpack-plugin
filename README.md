@@ -98,7 +98,7 @@ You can pass options to the plugin:
 new FriendlyErrorsPlugin({
   compilationSuccessInfo: {
     messages: ['You application is running here http://localhost:3000'],
-    notes: ['Some additionnal notes to be displayed unpon successful compilation']
+    notes: ['Some additionnal notes to be displayed uppon successful compilation']
   },
   onErrors: function (severity, errors) {
     // You can listen to errors transformed and prioritized by the plugin
