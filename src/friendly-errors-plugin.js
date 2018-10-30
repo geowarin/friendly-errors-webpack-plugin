@@ -80,8 +80,11 @@ class FriendlyErrorsWebpackPlugin {
   }
 
   displaySuccess(stats) {
-    const time = getCompileTime(stats);
-    output.title('success', 'DONE', 'Compiled successfully in ' + time + 'ms');
+    const rawTime = getCompileTime(stats);
+    const time = rawTime > 1000 ?
+      (rawTime / 1000).toFixed(2) + 's' :
+      rawTime + 'ms'
+    output.title('success', 'DONE', 'Compiled successfully in ' + time);
 
     if (this.compilationSuccessInfo.messages) {
       this.compilationSuccessInfo.messages.forEach(message => output.info(message));

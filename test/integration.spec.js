@@ -37,7 +37,7 @@ it('integration : success', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/success/webpack.config')
 
-  expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/);
+  expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)m?s/);
 });
 
 it('integration : module-errors', async() => {
