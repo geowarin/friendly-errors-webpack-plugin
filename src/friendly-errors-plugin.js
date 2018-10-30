@@ -82,7 +82,7 @@ class FriendlyErrorsWebpackPlugin {
   displaySuccess(stats) {
     const rawTime = getCompileTime(stats);
     const time = rawTime > 1000 ?
-      (rawTime / 1000).toFixed(2) + 's' :
+      (rawTime / 1000).toFixed(1) + 's' :
       rawTime + 'ms'
     output.title('success', 'DONE', 'Compiled successfully in ' + time);
 
