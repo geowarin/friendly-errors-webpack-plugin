@@ -13,7 +13,8 @@ function isModuleNotFoundError (e) {
 function transform(error) {
   const webpackError = error.webpackError;
   if (isModuleNotFoundError(error)) {
-    const module = webpackError.dependencies[0].request;
+    const dependency = webpackError.dependencies[0];
+    const module = dependency.request || dependency.options.request;
     return Object.assign({}, error, {
       message: `Module not found ${module}`,
       type: TYPE,
