@@ -81,7 +81,7 @@ class FriendlyErrorsWebpackPlugin {
   }
 
   displaySuccess(stats) {
-    const time = this.getCompileTime(stats);
+    const time = isMultiStats(stats) ? this.getMultiStatsCompileTime(stats) : this.getStatsCompileTime(stats);
     output.title('success', 'DONE', 'Compiled successfully in ' + time + 'ms');
 
     if (this.compilationSuccessInfo.messages) {
@@ -112,14 +112,7 @@ class FriendlyErrorsWebpackPlugin {
       .forEach(chunk => output.log(chunk));
   }
 
-  getCompileTime(stats, statsIndex) {
-    if (isMultiStats(stats)) {
-      // Webpack multi compilations run in parallel so using the longest duration.
-      // https://webpack.github.io/docs/configuration.html#multiple-configurations
-      return stats.stats
-        .reduce((time, stats, index) => Math.max(time, this.getCompileTime(stats, index)), 0);
-    }
-
+  getStatsCompileTime(stats, statsIndex) {
     // When we have multi compilations but only one of them is rebuilt, we need to skip the
     // unchanged compilers to report the true rebuild time.
     if (statsIndex !== undefined) {
@@ -131,6 +124,13 @@ class FriendlyErrorsWebpackPlugin {
     }
 
     return stats.endTime - stats.startTime;
+  }
+
+  getMultiStatsCompileTime(stats) {
+    // Webpack multi compilations run in parallel so using the longest duration.
+    // https://webpack.github.io/docs/configuration.html#multiple-configurations
+    return stats.stats
+      .reduce((time, stats, index) => Math.max(time, this.getStatsCompileTime(stats, index)), 0);
   }
 }
 
