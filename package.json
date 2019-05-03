@@ -3,6 +3,9 @@
   "version": "1.7.0",
   "description": "Recognizes certain classes of webpack errors and cleans, aggregates and prioritizes them to provide a better Developer Experience",
   "main": "index.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "scripts": {
     "test": "eslint --ignore-pattern test/* && jest"
   },
