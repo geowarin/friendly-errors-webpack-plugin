@@ -4,6 +4,7 @@ const colors = require('./utils/colors');
 const chalk = require('chalk');
 const stringWidth = require('string-width');
 const readline = require('readline');
+const stripAnsi = require('strip-ansi');
 
 class Debugger {
 
@@ -98,7 +99,7 @@ class Debugger {
 
   captureConsole (args, method) {
     if (this.capturing) {
-      this.capturedMessages.push(chalk.stripColor(args.join(' ')).trim());
+      this.capturedMessages.push(stripAnsi(args.join(' ')).trim());
     } else {
       method.apply(console, args);
     }
