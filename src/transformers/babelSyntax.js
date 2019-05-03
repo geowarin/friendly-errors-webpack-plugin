@@ -6,7 +6,7 @@
  */
 function cleanStackTrace(message) {
   return message
-    .replace(/^\s*at\s.*:\d+:\d+[\s\)]*\n/gm, ''); // at ... ...:x:y
+    .replace(/^\s*at\s.*:\d+:\d+[\s)]*\n/gm, ''); // at ... ...:x:y
 }
 
 function cleanMessage(message) {
