@@ -1,6 +1,6 @@
 {
   "name": "friendly-errors-webpack-plugin",
-  "version": "1.7.0",
+  "version": "2.0.0-beta.0",
   "description": "Recognizes certain classes of webpack errors and cleans, aggregates and prioritizes them to provide a better Developer Experience",
   "main": "index.js",
   "engines": {
