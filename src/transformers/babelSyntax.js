@@ -15,12 +15,12 @@ function cleanMessage(message) {
   // this should match
   // linux => "(SyntaxError: )Unexpected token (5:11)"
   // windows => "(SyntaxError: C:/projects/index.js: )Unexpected token (5:11)"
-    .replace(/^Module build failed.*:\s/, '')
-    .replace(/^ModuleBuildError.*:\s/, '');
+    .replace(/^Module build failed.*:\s/, 'Syntax Error: ')
+    .replace(/^ModuleBuildError.*:\s/, 'Syntax Error: ');
 }
 
 function isBabelSyntaxError(e) {
-  return e.name === 'ModuleBuildError' ||
+  return e.name === 'ModuleBuildError' || e.name === 'ModuleBuildError' &&
     e.message.indexOf('SyntaxError') >= 0;
 }
 
