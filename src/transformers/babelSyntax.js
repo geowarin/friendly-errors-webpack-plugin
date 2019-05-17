@@ -11,12 +11,12 @@ function cleanStackTrace(message) {
 
 function cleanMessage(message) {
   return message
-  // match until the last semicolon followed by a space
-  // this should match
-  // linux => "(SyntaxError: )Unexpected token (5:11)"
-  // windows => "(SyntaxError: C:/projects/index.js: )Unexpected token (5:11)"
-    .replace(/^Module build failed.*:\s/, 'Syntax Error: ')
-    .replace(/^ModuleBuildError.*:\s/, 'Syntax Error: ');
+    // match until the last semicolon followed by a space
+    // this should match
+    // linux => "(SyntaxError: )Unexpected token (5:11)"
+    // windows => "(SyntaxError: C:/projects/index.js: )Unexpected token (5:11)"
+    .replace(/^Module build failed.*:\s/, '')
+    .replace(/^ModuleBuildError.*:\s/, '');
 }
 
 function isBabelSyntaxError(e) {
