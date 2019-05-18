@@ -33,14 +33,14 @@ async function executeAndGetLogs(fixture, globalPlugins) {
   }
 }
 
-it('integration : success', async () => {
+it('integration : success', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/success/webpack.config')
 
   expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/);
 });
 
-it('integration : module-errors', async () => {
+it('integration : module-errors', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/module-errors/webpack.config.js');
 
@@ -65,7 +65,7 @@ function filename(filePath) {
   return path.join(__dirname, path.normalize(filePath))
 }
 
-it('integration : should display eslint warnings', async () => {
+it('integration : should display eslint warnings', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/eslint-warnings/webpack.config.js');
 
@@ -89,7 +89,7 @@ Use /* eslint-disable */ to ignore all warnings in a file.`
   )
 });
 
-it('integration : babel syntax error', async () => {
+it('integration : babel syntax error', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/babel-syntax/webpack.config');
 
@@ -98,7 +98,7 @@ it('integration : babel syntax error', async () => {
     '',
     'error  in ./test/fixtures/babel-syntax/index.js',
     '',
-    `Unexpected token (5:11)
+    `Syntax Error: Unexpected token (5:11)
 
   3 |${' '}
   4 |   render() {
@@ -110,7 +110,7 @@ it('integration : babel syntax error', async () => {
   ]);
 });
 
-it('integration : webpack multi compiler : success', async () => {
+it('integration : webpack multi compiler : success', async() => {
 
   // We apply the plugin directly to the compiler when targeting multi-compiler
   let globalPlugins = [new FriendlyErrorsWebpackPlugin()];
@@ -119,7 +119,7 @@ it('integration : webpack multi compiler : success', async () => {
   expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/)
 });
 
-it('integration : webpack multi compiler : module-errors', async () => {
+it('integration : webpack multi compiler : module-errors', async() => {
 
   // We apply the plugin directly to the compiler when targeting multi-compiler
   let globalPlugins = [new FriendlyErrorsWebpackPlugin()];
