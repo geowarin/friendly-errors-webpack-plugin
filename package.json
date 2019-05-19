@@ -33,22 +33,27 @@
   },
   "devDependencies": {
     "babel-core": "^6.23.1",
-    "babel-eslint": "^7.1.1",
-    "babel-loader": "^6.3.0",
-    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-react": "^6.23.0",
+    "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
-    "eslint-loader": "^1.6.1",
-    "eslint-plugin-node": "^9.0.0",
-    "expect": "^1.20.2",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-node": "^9.0.1",
+    "expect": "^24.8.0",
     "jest": "^18.1.0",
     "memory-fs": "^0.4.1",
-    "webpack": "^2.2.1"
+    "mini-css-extract-plugin": "^0.6.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.31.0"
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "error-stack-parser": "^2.0.0",
+    "error-stack-parser": "^2.0.2",
     "string-width": "^2.0.0",
-    "strip-ansi": "^3"
+    "strip-ansi": "^5"
   }
 }

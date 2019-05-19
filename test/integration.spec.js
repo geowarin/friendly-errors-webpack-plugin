@@ -56,8 +56,8 @@ it('integration : module-errors', async() => {
     '',
     'These relative modules were not found:',
     '',
-    '* ./non-existing in ./test/fixtures/module-errors/index.js',
     '* ../non-existing in ./test/fixtures/module-errors/index.js',
+    '* ./non-existing in ./test/fixtures/module-errors/index.js',
   ]);
 });
 
@@ -72,11 +72,15 @@ it('integration : should display eslint warnings', async() => {
   expect(logs.join('\n')).toEqual(
     `WARNING  Compiled with 2 warnings
 
+Module Warning (from ./node_modules/eslint-loader/index.js):
+
 ${filename('fixtures/eslint-warnings/index.js')}
   3:7  warning  'unused' is assigned a value but never used   no-unused-vars
   4:7  warning  'unused2' is assigned a value but never used  no-unused-vars
 
 ✖ 2 problems (0 errors, 2 warnings)
+
+Module Warning (from ./node_modules/eslint-loader/index.js):
 
 ${filename('fixtures/eslint-warnings/module.js')}
   1:7  warning  'unused' is assigned a value but never used  no-unused-vars
@@ -108,6 +112,15 @@ it('integration : babel syntax error', async() => {
   7 | }`,
     ''
   ]);
+});
+
+it('integration : mini CSS extract plugin babel error', async() => {
+
+  const logs = await executeAndGetLogs('./fixtures/mini-css-extract-babel-syntax/webpack.config');
+  const clean_logs = logs.toString().replace(/\"/g, ""); //<- double quotes issue with slash
+  expect(clean_logs).toEqual(
+    `ERROR  Failed to compile with 1 errors,,error  in ./test/fixtures/mini-css-extract-babel-syntax/index.scss,,Syntax Error: NonErrorEmittedError: (Emitted value instead of an instance of Error) ReferenceError: window is not defined,`
+  );
 });
 
 it('integration : webpack multi compiler : success', async() => {
