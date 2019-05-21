@@ -119,7 +119,15 @@ it('integration : mini CSS extract plugin babel error', async() => {
   const logs = await executeAndGetLogs('./fixtures/mini-css-extract-babel-syntax/webpack.config');
   const clean_logs = logs.toString().replace(/\"/g, ""); //<- double quotes issue with slash
   expect(clean_logs).toEqual(
-    `ERROR  Failed to compile with 1 errors,,error  in ./test/fixtures/mini-css-extract-babel-syntax/index.scss,,Syntax Error: NonErrorEmittedError: (Emitted value instead of an instance of Error) ReferenceError: window is not defined,`
+    `ERROR  Failed to compile with 1 errors,,error  in ./test/fixtures/mini-css-extract-babel-syntax/index.scss,,.test {
+  ^
+      Expected digit.
+  ╷
+7 │         .test {
+  │          ^
+  ╵
+  stdin 7:4  root stylesheet
+      in ${filename('fixtures/mini-css-extract-babel-syntax/index.scss')} (line 7, column 4),`
   );
 });
 
