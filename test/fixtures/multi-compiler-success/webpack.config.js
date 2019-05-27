@@ -1,5 +1,6 @@
 module.exports = [
     {
+      mode: 'development',
       entry: __dirname + "/index.js",
       output: {
         path: __dirname + "/dist",
@@ -7,6 +8,7 @@ module.exports = [
       }
     },
     {
+      mode: 'development',
       entry: __dirname + "/index2.js",
       output: {
         path: __dirname + "/dist",
