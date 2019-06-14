@@ -19,6 +19,33 @@ errors get handled, please open a [PR](https://help.github.com/articles/creating
 npm install friendly-errors-webpack-plugin --save-dev
 ```
 
+##### Recommandetion
+
+```bash
+npm install eslint-formatter-friendly --save-dev
+```
+
+This is a different (non-default) eslint-loader formatter to show warnings and errors:
+
+```javascript
+{
+    loader: 'eslint-loader',
+    options: {
+      // ...
+      formatter: require('eslint-formatter-friendly')
+    }
+}
+```
+
+The errors will look like this now:
+
+![](https://i.imgur.com/Lfi6nMX.png)
+
+instead of: (with the default eslint-loader formatter):
+
+![](https://i.imgur.com/nw1ilxF.png)
+
+
 ### Basic usage
 
 Simply add `FriendlyErrorsWebpackPlugin` to the plugin section in your Webpack config.
@@ -53,6 +80,8 @@ If you use the webpack-dev-server, there is a setting in webpack's ```devServer`
 // webpack config root
 {
   // ...
+  stats:'none', // if you don't run webpack from webpack-dev-server
+  // ...
   devServer: {
     // ...
     quiet: true,
@@ -78,7 +107,7 @@ _Thanks to [webpack-dashboard](https://github.com/FormidableLabs/webpack-dashboa
 
 ![success](http://i.imgur.com/MkUEhYz.gif)
 
-### eslint-loader errors
+### eslint-loader errors (with the default eslint-loader formatter)
 
 ![lint](http://i.imgur.com/xYRkldr.gif)
 
