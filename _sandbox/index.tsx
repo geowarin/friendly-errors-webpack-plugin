@@ -1,0 +1,3 @@
+
+
+require('./my-app.tsx')

@@ -1,21 +1,26 @@
 {
-  "root": true,
-  "parser": "babel-eslint",
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true,
-    "jest": true,
-    "node": true
-  },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "classes": true,
+      "modules": true,
+      "legacyDecorators": true,
+      "jsx": true
+    }
   },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "mocha": true
+  },
+  "plugins": ["react", "@typescript-eslint"],
+  "extends": [
+    "eslint:recommended"
+  ],
   "rules": {
-    // http://eslint.org/docs/rules/
-    "no-unused-expressions": "warn",
-    "no-unused-labels": "warn",
-    "no-unused-vars": ["warn", { "vars": "local", "args": "none" }]
+    "@typescript-eslint/no-unused-vars": "off"
   }
 }

@@ -1,29 +1,34 @@
 const FriendlyErrorsWebpackPlugin = require('../index');
+const friendlyEslintFormatter = require('eslint-formatter-friendly')
 
 module.exports = {
-  entry: __dirname + "/index.js",
+  entry: __dirname + "/index.tsx",
   output: {
     path: __dirname + "/dist",
     filename: "bundle.js"
   },
+  stats:'none',
   plugins: [
     new FriendlyErrorsWebpackPlugin()
   ],
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.js$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: __dirname
-      },
-      {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react'],
-        },
-        exclude: /node_modules/
+        test: /\.(ts|js)x?$/,
+        exclude: /(node_module|dist)/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-react'],
+            },
+          },
+          {
+            loader: 'eslint-loader',
+            options: {
+            }
+          },
+        ],
       }
     ]
   }
