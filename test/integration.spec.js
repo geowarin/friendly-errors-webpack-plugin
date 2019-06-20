@@ -161,3 +161,44 @@ it('integration : webpack multi compiler : module-errors', async() => {
     '* ./non-existing in ./test/fixtures/multi-compiler-module-errors/index.js',
   ]);
 });
+
+it('integration : postcss-loader : warnings', async() => {
+
+  const logs = await executeAndGetLogs('./fixtures/postcss-warnings/webpack.config');
+  expect(logs).toEqual([
+    'WARNING  Compiled with 1 warnings',
+    '',
+    'warning  in ./test/fixtures/postcss-warnings/index.css',
+    '',
+    `Module Warning (from ./node_modules/postcss-loader/src/index.js):
+Warning
+
+(3:2) grid-gap only works if grid-template(-areas) is being used`,
+    ''
+  ]);
+});
+
+it('integration : postcss-loader : warnings (multi-compiler version)', async() => {
+
+  const logs = await executeAndGetLogs('./fixtures/multi-postcss-warnings/webpack.config');
+  expect(logs).toEqual([
+    'WARNING  Compiled with 1 warnings',
+    '',
+    'warning  in ./test/fixtures/multi-postcss-warnings/index.css',
+    '',
+    `Module Warning (from ./node_modules/postcss-loader/src/index.js):
+Warning
+
+(3:2) grid-gap only works if grid-template(-areas) is being used`,
+    '',
+    'WARNING  Compiled with 1 warnings',
+    '',
+    'warning  in ./test/fixtures/multi-postcss-warnings/index2.css',
+    '',
+    `Module Warning (from ./node_modules/postcss-loader/src/index.js):
+Warning
+
+(3:2) grid-auto-flow works only if grid-template-rows and grid-template-columns are present in the same rule`,
+    ''
+  ]);
+});
