@@ -161,3 +161,20 @@ it('integration : webpack multi compiler : module-errors', async() => {
     '* ./non-existing in ./test/fixtures/multi-compiler-module-errors/index.js',
   ]);
 });
+
+it('integration : missing loader', async() => {
+
+  // We apply the plugin directly to the compiler when targeting multi-compiler
+  let globalPlugins = [new FriendlyErrorsWebpackPlugin()];
+  const logs = await executeAndGetLogs('./fixtures/module-missing-loader-error/webpack.config', globalPlugins);
+
+  expect(logs).toEqual([
+    'ERROR  Failed to compile with 1 errors',
+    '',
+    'This dependency was not found in node_modules:',
+    '',
+    '* missing-loader in ./test/fixtures/module-missing-loader-error/index.js',
+    '',
+    'Install the missing loader with: npm install --save missing-loader'
+  ]);
+});
