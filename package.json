@@ -28,6 +28,10 @@
     "url": "https://github.com/geowarin/friendly-errors-webpack-plugin/issues"
   },
   "license": "MIT",
+  "jest": {
+    "testEnvironment": "node",
+    "transformIgnorePatterns": ["node_modules", "src", "index.js"]
+  },
   "peerDependencies": {
     "webpack": "^4.0.0"
   },
@@ -43,7 +47,7 @@
     "eslint-loader": "^2.1.2",
     "eslint-plugin-node": "^9.0.1",
     "expect": "^24.8.0",
-    "jest": "^18.1.0",
+    "jest": "^24.8.0",
     "memory-fs": "^0.4.1",
     "mini-css-extract-plugin": "^0.6.0",
     "node-sass": "^4.12.0",
