@@ -37,7 +37,7 @@ it('integration : success', async() => {
 
   const logs = await executeAndGetLogs('./fixtures/success/webpack.config')
 
-  expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/);
+  expect(logs.join('\n')).toMatch(/DONE {2}Compiled successfully in (.\d*)ms/);
 });
 
 it('integration : module-errors', async() => {
@@ -93,14 +93,34 @@ Use /* eslint-disable */ to ignore all warnings in a file.`
   )
 });
 
-it('integration : babel syntax error', async() => {
+it('integration : babel syntax error with babel-loader 7 (babel 6)', async() => {
 
-  const logs = await executeAndGetLogs('./fixtures/babel-syntax/webpack.config');
+  const logs = await executeAndGetLogs('./fixtures/babel-syntax-babel-6/webpack.config');
 
   expect(logs).toEqual([
     'ERROR  Failed to compile with 1 errors',
     '',
-    'error  in ./test/fixtures/babel-syntax/index.js',
+    'error  in ./test/fixtures/babel-syntax-babel-6/index.js',
+    '',
+    `Syntax Error: Unexpected token (5:11)
+
+  3 |${' '}
+  4 |   render() {
+> 5 |     return <div>
+    |            ^
+  6 |   }
+  7 | }`,
+    ''
+  ]);
+});
+it('integration : babel syntax error with babel-loader 8 (babel 7)', async() => {
+
+  const logs = await executeAndGetLogs('./fixtures/babel-syntax-babel-7/webpack.config');
+
+  expect(logs).toEqual([
+    'ERROR  Failed to compile with 1 errors',
+    '',
+    'error  in ./test/fixtures/babel-syntax-babel-7/index.js',
     '',
     `Syntax Error: Unexpected token (5:11)
 
@@ -137,7 +157,7 @@ it('integration : webpack multi compiler : success', async() => {
   let globalPlugins = [new FriendlyErrorsWebpackPlugin()];
   const logs = await executeAndGetLogs('./fixtures/multi-compiler-success/webpack.config', globalPlugins);
 
-  expect(logs.join('\n')).toMatch(/DONE  Compiled successfully in (.\d*)ms/)
+  expect(logs.join('\n')).toMatch(/DONE {2}Compiled successfully in (.\d*)ms/)
 });
 
 it('integration : webpack multi compiler : module-errors', async() => {
