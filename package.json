@@ -1,6 +1,6 @@
 {
   "name": "friendly-errors-webpack-plugin",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "Recognizes certain classes of webpack errors and cleans, aggregates and prioritizes them to provide a better Developer Experience",
   "main": "index.js",
   "engines": {
@@ -30,7 +30,11 @@
   "license": "MIT",
   "jest": {
     "testEnvironment": "node",
-    "transformIgnorePatterns": ["node_modules", "src", "index.js"]
+    "transformIgnorePatterns": [
+      "node_modules",
+      "src",
+      "index.js"
+    ]
   },
   "peerDependencies": {
     "webpack": "^4.0.0"
@@ -41,8 +45,8 @@
     "autoprefixer": "^9.6.0",
     "babel-core": "6.26.3",
     "babel-eslint": "^10.0.1",
-    "babel-loader-8": "npm:babel-loader@8.0.6",
     "babel-loader-7": "npm:babel-loader@7.1.5",
+    "babel-loader-8": "npm:babel-loader@8.0.6",
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
