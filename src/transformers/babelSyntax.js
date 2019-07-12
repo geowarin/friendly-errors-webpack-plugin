@@ -18,8 +18,8 @@ function cleanMessage(message) {
     .replace(/^Module build failed.*:\s/, 'Syntax Error: ')
     // remove mini-css-extract-plugin loader tracing errors
     .replace(/^Syntax Error: ModuleBuildError:.*:\s/, '')
-    // remove babel extra wording
-    .replace('SyntaxError: ', '');
+    // remove babel extra wording and path
+    .replace(/^Syntax Error: SyntaxError: (([A-Z]:)?\/.*:\s)?/, 'Syntax Error: ');
 }
 
 function isBabelSyntaxError(e) {

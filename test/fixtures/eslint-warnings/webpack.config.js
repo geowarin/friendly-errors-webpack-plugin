@@ -22,7 +22,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: require.resolve('babel-loader-7'),
       }
     ]
   },

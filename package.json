@@ -36,12 +36,13 @@
     "webpack": "^4.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-transform-async-to-generator": "^7.5.0",
     "autoprefixer": "^9.6.0",
-    "babel-core": "^6.23.1",
+    "babel-core": "6.26.3",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-preset-react": "^6.23.0",
+    "babel-loader-8@npm:babel-loader": "^8.0.6",
+    "babel-loader-7@npm:babel-loader": "^7.1.4",
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
