@@ -142,7 +142,19 @@ function extractErrorsFromStats(stats, type) {
     // compilers depend on the same module.
     return uniqueBy(errors, error => error.message);
   }
-  return stats.compilation[type];
+
+  const findErrorsRecursive = (compilation) => {
+    const errors = compilation[type];
+    if (errors.length === 0 && compilation.children) {
+      for (const child of compilation.children) {
+        errors.push(...findErrorsRecursive(child));
+      }
+    }
+
+    return uniqueBy(errors, error => error.message);
+  };
+
+  return findErrorsRecursive(stats.compilation);
 }
 
 function isMultiStats(stats) {
