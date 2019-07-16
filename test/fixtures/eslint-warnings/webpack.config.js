@@ -1,6 +1,7 @@
 const FriendlyErrorsWebpackPlugin = require('../../../index');
 
 module.exports = {
+  mode: 'development',
   entry: __dirname + "/index.js",
   output: {
     path: __dirname + "/dist",
@@ -11,18 +12,18 @@ module.exports = {
 
   ],
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.js$/,
-	loader: 'eslint-loader',
         enforce: 'pre',
-        include: __dirname
+        test: /\.js$/,
+        loader: 'eslint-loader',
+        include: __dirname,
       },
       {
         test: /\.jsx?$/,
-	loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        loader: 'babel-loader',
       }
     ]
-  }
+  },
 };
