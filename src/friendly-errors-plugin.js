@@ -85,11 +85,15 @@ class FriendlyErrorsWebpackPlugin {
     output.title('success', 'DONE', 'Compiled successfully in ' + time + 'ms');
 
     if (this.compilationSuccessInfo.messages) {
-      this.compilationSuccessInfo.messages.forEach(message => output.info(message));
+      this.compilationSuccessInfo.messages.forEach(message => {
+        typeof message === 'function' ? output.info(message()) : output.info(message);
+      });
     }
     if (this.compilationSuccessInfo.notes) {
       output.log();
-      this.compilationSuccessInfo.notes.forEach(note => output.note(note));
+      this.compilationSuccessInfo.notes.forEach(note => {
+        typeof note === 'function' ? output.info(note()) : output.info(note);
+      });
     }
   }
 
