@@ -19,12 +19,22 @@ function transform(error) {
       message: `Module not found ${module}`,
       type: TYPE,
       severity: 900,
-      module,
+      module: module || extractModuleName(webpackError.message || ''),
       name: 'Module not found'
     });
   }
 
   return error;
+}
+
+const re = /Can't resolve '([^']*)'/
+
+function extractModuleName(message) {
+  const matches = message.match(re)
+
+  if (matches && matches[1]) {
+    return matches[1]
+  }
 }
 
 module.exports = transform;
