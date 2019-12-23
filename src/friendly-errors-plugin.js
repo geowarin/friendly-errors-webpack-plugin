@@ -49,12 +49,12 @@ class FriendlyErrorsWebpackPlugin {
       }
 
       if (hasErrors) {
-        this.displayErrors(extractErrorsFromStats(stats, 'errors'), 'error');
+        this.displayErrors(stats, true);
         return;
       }
 
       if (hasWarnings) {
-        this.displayErrors(extractErrorsFromStats(stats, 'warnings'), 'warning');
+        this.displayErrors(stats, false);
       }
     };
 
@@ -93,11 +93,21 @@ class FriendlyErrorsWebpackPlugin {
     }
   }
 
-  displayErrors(errors, severity) {
+  displayErrors(stats, fatal) {
+    const errors = fatal
+      ? extractErrorsFromStats(stats, 'errors')
+      : extractErrorsFromStats(stats, 'warnings');
+    const severity = fatal ? 'error' : 'warning';
+    
     const processedErrors = transformErrors(errors, this.transformers);
 
     const topErrors = getMaxSeverityErrors(processedErrors);
     const nbErrors = topErrors.length;
+    
+    if (nbErrors === 0) {
+      this.displaySuccess(stats);
+      return;
+    }
 
     const subtitle = severity === 'error' ?
       `Failed to compile with ${nbErrors} ${severity}s` :
