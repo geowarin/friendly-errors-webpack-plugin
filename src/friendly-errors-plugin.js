@@ -63,11 +63,19 @@ class FriendlyErrorsWebpackPlugin {
       output.title('info', 'WAIT', 'Compiling...');
     };
 
+    const failedFn = (error) => {
+      this.clearConsole();
+      this.displayErrors([error], 'error');
+    }
+
     if (compiler.hooks) {
       const plugin = { name: 'FriendlyErrorsWebpackPlugin' };
 
       compiler.hooks.done.tap(plugin, doneFn);
       compiler.hooks.invalid.tap(plugin, invalidFn);
+      if (compiler.hooks.failed) {
+        compiler.hooks.failed.tap(plugin, failedFn)
+      }
     } else {
       compiler.plugin('done', doneFn);
       compiler.plugin('invalid', invalidFn);

@@ -222,3 +222,22 @@ Warning
     ''
   ]);
 });
+
+it('integration : error', (done) => {
+  const compiler = webpack(require('./fixtures/error/webpack.config'));
+  compiler.outputFileSystem = new MemoryFileSystem();
+
+  output.capture();
+  compiler.run(() => {
+    expect(output.capturedMessages).toEqual([
+      'ERROR  Failed to compile with 1 errors',
+      '',
+      'error',
+      '',
+      'Error',
+      ''
+    ]);
+    output.endCapture();
+    done();
+  })
+});
