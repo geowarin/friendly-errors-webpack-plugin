@@ -2,7 +2,8 @@
 
 function isEslintError (e) {
   return e.originalStack
-    .some(stackframe => stackframe.fileName && stackframe.fileName.indexOf('eslint-loader') > 0);
+    .some(stackframe => stackframe.fileName && stackframe.fileName.indexOf('eslint-loader') > 0) ||
+    e.name === 'ESLintError';
 }
 
 function transform(error) {
