@@ -100,8 +100,8 @@ class FriendlyErrorsWebpackPlugin {
     const nbErrors = topErrors.length;
 
     const subtitle = severity === 'error' ?
-      `Failed to compile with ${nbErrors} ${severity}s` :
-      `Compiled with ${nbErrors} ${severity}s`;
+      `Failed to compile with ${nbErrors} ${severity}${nbErrors === 1 ? '' : 's'}` :
+      `Compiled with ${nbErrors} ${severity}${nbErrors === 1 ? '' : 's'}`;
     output.title(severity, severity.toUpperCase(), subtitle);
 
     if (this.onErrors) {

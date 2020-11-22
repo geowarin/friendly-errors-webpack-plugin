@@ -90,8 +90,6 @@ class Debugger {
       this.capture();
       fun.call();
       return this.capturedMessages;
-    } catch (e) {
-      throw e;
     } finally {
       this.endCapture();
     }
